@@ -21,6 +21,14 @@ function SaveSettingsTableSettings()
     if (writefile) then
         json = HttpService:JSONEncode(_G.SettingsTable)
         writefile(SettingsTableName, json)
+        game.StarterGui:SetCore(
+               	"SendNotification",
+            {
+                Title = "SUCCESS!",
+                Text = "Settings Have Been Saved",
+                Duration = 5
+            }
+        )
     end
 end
 
@@ -177,11 +185,9 @@ if _G.SettingsTable.TpToEgg then
     TweenToEgg()
 end
 
-
-
 -- Library
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Buddy Foundation GUI", "DarkTheme")
+local Window = Library.CreateLib("Buddy Foundation GUI", "Midnight")
 
 -- CreditsUI
 local CreditsTab = Window:NewTab("Credits")
@@ -190,8 +196,8 @@ local CreditsSection1 = CreditsTab:NewSection("Creator/Dev: A&J Gaming#1569")
 local CreditsSection3 = CreditsTab:NewSection("Helper: Cor#0002")
 local CreditsSection4 = CreditsTab:NewSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection5 = CreditsTab:NewSection("-------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-09-30")
-local CreditsSection7 = CreditsTab:NewSection("Last Update: New GUI + Many New Features!")
+local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-10-01")
+local CreditsSection7 = CreditsTab:NewSection("Last Update: New UI Color + Save Settings Change")
 local CreditsSection8 = CreditsTab:NewSection("Upcoming Update: More New Features")
 local CreditsSection10 = CreditsTab:NewSection("-------------------------------------------------------------------")
 
@@ -221,18 +227,15 @@ local ToggleUISection = TogglesTab:NewSection("Toggle UI")
 -- AutoFarm
 AutoGroupRewardsSection:NewToggle("Auto Collect Group Rewards", "Auto Collects Group Rewards", function(bool)
     _G.SettingsTable.ClaimGroupBenefits = bool
-    SaveSettingsTableSettings()
     if bool then
         ClaimGroupBenefits()
     end
 end)
-AutoFarmSelection:NewTextBox("Choose Gem Type: ", "Example: Candy 5, Coins 1 (Case Sensitive!)", function(GemTypetxt)
-	_G.SettingsTable.GemType = GemTypetxt
-    SaveSettingsTableSettings()
+AutoFarmSelection:NewDropdown("Craft Option", "Select Which Type you want to craft in factory", {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5"}, function(GemTypetxt)
+    _G.SettingsTable.GemType = GemTypetxt
 end)
 AutoFarmSelection:NewToggle("Auto Factory Craft", "Auto Crafts Gems of your choosing", function(bool)
     _G.SettingsTable.AutoCraft = bool
-    SaveSettingsTableSettings()
     if bool then
         AutoFactoryCraft1()
         AutoFactoryCraft2()
@@ -243,37 +246,30 @@ end)
 --EggFarming
 AutoHatchEggSection:NewTextBox("Choose Egg: ", "Choose what egg you want to hatch (Case Sensitive!)", function(EggTypetxt)
 	_G.SettingsTable.EggType = EggTypetxt
-    SaveSettingsTableSettings()
 end)
 AutoHatchEggSection:NewToggle("Quad/Multi Hatch", "Quad/Multi Hatches Eggs", function(bool)
     _G.SettingsTable.MultiHatch = bool
-    SaveSettingsTableSettings()
 end)
 AutoHatchEggSection:NewToggle("Start Hatching Egg", "Starts Hatching The Egg", function(bool)
     _G.SettingsTable.BuyEgg = bool
-    SaveSettingsTableSettings()
     if bool then
         HatchEgg()
     end
 end)
 AutoHatchEggSection:NewButton("Skip Animation", "Skips The Hatching Animation", function()
     _G.SettingsTable.SkipAnimation = true
-    SaveSettingsTableSettings()
     if _G.SettingsTable.SkipAnimation then
         SkipAnimation()
     end
 end)
 AutoTeleportSection:NewTextBox("Choose Egg: ", "Choose what egg you want to tp to (Case Sensitive!)", function(Eggtptxt)
 	_G.SettingsTable.EggTP = Eggtptxt
-    SaveSettingsTableSettings()
 end)
 AutoTeleportSection:NewDropdown("World", "Select Which World To TP To", {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland"}, function(WorldTextOption)
     _G.SettingsTable.WorldOption = WorldTextOption
-    SaveSettingsTableSettings()
 end)
 AutoTeleportSection:NewButton("Teleport To Egg", "Teleports You To The Selected Egg", function()
     _G.SettingsTable.TpToEgg = true
-    SaveSettingsTableSettings()
     if _G.SettingsTable.TpToEgg then
         TweenToEgg()
     end
@@ -323,7 +319,6 @@ function abb(Value)
     end
     return Formatted
 end
-
 while wait() do
     local plr = game.Players.LocalPlayer
     local OnlyCount = {plr.Name}
