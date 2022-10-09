@@ -13,7 +13,9 @@ _G.SettingsTable = {
     
 }
 
-local SettingsTableName = "AJ_Hatching_Settings_MS2.txt"
+local username = game:GetService("Players").LocalPlayer.Name
+
+local SettingsTableName = username .. "_Settings_MS2.txt"
 
 function SaveSettingsTableSettings()
     local json
@@ -196,8 +198,8 @@ local CreditsSection1 = CreditsTab:NewSection("Creator/Dev: A&J Gaming#1569")
 local CreditsSection3 = CreditsTab:NewSection("Helper: Cor#0002")
 local CreditsSection4 = CreditsTab:NewSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection5 = CreditsTab:NewSection("-------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-10-01")
-local CreditsSection7 = CreditsTab:NewSection("Last Update: New UI Color + Save Settings Change")
+local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-10-08")
+local CreditsSection7 = CreditsTab:NewSection("Last Update: Save Settings Per Acc + More")
 local CreditsSection8 = CreditsTab:NewSection("Upcoming Update: More New Features")
 local CreditsSection10 = CreditsTab:NewSection("-------------------------------------------------------------------")
 
@@ -262,10 +264,13 @@ AutoHatchEggSection:NewButton("Skip Animation", "Skips The Hatching Animation", 
         SkipAnimation()
     end
 end)
+AutoHatchEggSection:NewButton("Disable Skip Animation", "turns off skip animation when auto loading", function()
+    _G.SettingsTable.SkipAnimation = false
+end)
 AutoTeleportSection:NewTextBox("Choose Egg: ", "Choose what egg you want to tp to (Case Sensitive!)", function(Eggtptxt)
 	_G.SettingsTable.EggTP = Eggtptxt
 end)
-AutoTeleportSection:NewDropdown("World", "Select Which World To TP To", {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland"}, function(WorldTextOption)
+AutoTeleportSection:NewDropdown("World", "Select Which World To TP To", {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Halloween World"}, function(WorldTextOption)
     _G.SettingsTable.WorldOption = WorldTextOption
 end)
 AutoTeleportSection:NewButton("Teleport To Egg", "Teleports You To The Selected Egg", function()
@@ -321,14 +326,7 @@ function abb(Value)
 end
 while wait() do
     local plr = game.Players.LocalPlayer
-    local OnlyCount = {plr.Name}
     local count = 0
-    for i,v in pairs(game:GetService("Players"):GetChildren()) do
-        for n,b in pairs(OnlyCount) do
-            if string.find(v.Name, b) then
-                count = v.leaderstats["Eggs"].Value    
-            end
-        end
-    end
+    count = game:GetService("Players")[username].leaderstats.Eggs.Value
     EggsLabel:UpdateLabel("Eggs Hatched: " .. abb(count))
 end
