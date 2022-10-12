@@ -9,6 +9,7 @@ _G.SettingsTable = {
     BuyEgg = false;
     SkipAnimation = false;
     AutoCraft = false;
+    BuyHalloweenBoost = false;
 
     
 }
@@ -99,9 +100,49 @@ function ClaimGroupBenefits()
     end)
 end
 
+function BuyHalloweenBoosts1()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.BuyHalloweenBoost then break end
+            local args = {
+                [1] = "boost0"
+            }
+            
+            game:GetService("ReplicatedStorage").Events.BuyEventShopItem:FireServer(unpack(args))
+        end
+    end)
+end
+
+function BuyHalloweenBoosts2()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.BuyHalloweenBoost then break end
+            local args = {
+                [1] = "boost1"
+            }
+            
+            game:GetService("ReplicatedStorage").Events.BuyEventShopItem:FireServer(unpack(args))
+        end
+    end)
+end
+
+function BuyHalloweenBoosts3()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.BuyHalloweenBoost then break end
+            local args = {
+                [1] = "boost2"
+            }
+            
+            game:GetService("ReplicatedStorage").Events.BuyEventShopItem:FireServer(unpack(args))
+        end
+    end)
+end
+
 function AutoFactoryCraft1()
     spawn(function()
         while wait(30) do
+            if not _G.SettingsTable.AutoCraft then break end
             local args = {
                 [1] = 1
             }
@@ -121,6 +162,7 @@ end
 function AutoFactoryCraft2()
     spawn(function()
         while wait(30) do
+            if not _G.SettingsTable.AutoCraft then break end
             local args = {
                 [1] = 2
             }
@@ -140,6 +182,7 @@ end
 function AutoFactoryCraft3()
     spawn(function()
         while wait(30) do
+            if not _G.SettingsTable.AutoCraft then break end
             local args = {
                 [1] = 3
             }
@@ -172,6 +215,11 @@ LoadSettingsTableSettings()
 if _G.SettingsTable.SkipAnimation then
     SkipAnimation()
 end
+if _G.SettingsTable.BuyHalloweenBoost then
+    BuyHalloweenBoosts1()
+    BuyHalloweenBoosts2()
+    BuyHalloweenBoosts3()
+end
 if _G.SettingsTable.AutoCraft then
     AutoFactoryCraft1()
     AutoFactoryCraft2()
@@ -189,24 +237,24 @@ end
 
 -- Library
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Buddy Foundation GUI", "Midnight")
+local Window = Library.CreateLib("Hatcher's Hub GUI", "Midnight")
 
 -- CreditsUI
 local CreditsTab = Window:NewTab("Credits")
-local CreditsSection = CreditsTab:NewSection("------------------ Buddy Foundation GUI ------------------")
+local CreditsSection = CreditsTab:NewSection("--------------------- Hatcher's Hub GUI ---------------------")
 local CreditsSection1 = CreditsTab:NewSection("Creator/Dev: A&J Gaming#1569")
 local CreditsSection3 = CreditsTab:NewSection("Helper: Cor#0002")
 local CreditsSection4 = CreditsTab:NewSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection5 = CreditsTab:NewSection("-------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-10-08")
-local CreditsSection7 = CreditsTab:NewSection("Last Update: Save Settings Per Acc + More")
+local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-10-11")
+local CreditsSection7 = CreditsTab:NewSection("Last Update: New GUI Name + Buy Halloween Boosts")
 local CreditsSection8 = CreditsTab:NewSection("Upcoming Update: More New Features")
 local CreditsSection10 = CreditsTab:NewSection("-------------------------------------------------------------------")
 
 -- AutofarmUI
 local AutoFarmTab = Window:NewTab("AutoFarm")
 local AutoFarmSelection = AutoFarmTab:NewSection("Auto Farm Gems")
-local AutoGroupRewardsSection = AutoFarmTab:NewSection("Auto Collect Group Rewards")
+local AutoGroupRewardsSection = AutoFarmTab:NewSection("Auto Collect Features")
 
 -- EggFarmingUI
 local EggFarmingTab = Window:NewTab("Egg Farming")
@@ -231,6 +279,14 @@ AutoGroupRewardsSection:NewToggle("Auto Collect Group Rewards", "Auto Collects G
     _G.SettingsTable.ClaimGroupBenefits = bool
     if bool then
         ClaimGroupBenefits()
+    end
+end)
+AutoGroupRewardsSection:NewToggle("Auto Buy Halloween Boosts", "Auto Buys halloween boosts", function(bool)
+    _G.SettingsTable.BuyHalloweenBoost = bool
+    if bool then
+        BuyHalloweenBoosts1()
+        BuyHalloweenBoosts2()
+        BuyHalloweenBoosts3()
     end
 end)
 AutoFarmSelection:NewDropdown("Craft Option", "Select Which Type you want to craft in factory", {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5"}, function(GemTypetxt)
