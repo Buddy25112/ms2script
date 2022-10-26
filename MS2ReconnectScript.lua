@@ -237,18 +237,20 @@ end
 
 -- Library
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Hatcher's Hub GUI", "Midnight")
+local Window = Library.CreateLib("Hatchers Hub | Mining Simulator 2 | Version 1.0.0", "Midnight")
 
 -- CreditsUI
 local CreditsTab = Window:NewTab("Credits")
-local CreditsSection = CreditsTab:NewSection("--------------------- Hatcher's Hub GUI ---------------------")
-local CreditsSection1 = CreditsTab:NewSection("Creator/Dev: A&J Gaming#1569")
-local CreditsSection3 = CreditsTab:NewSection("Helper: Cor#0002")
-local CreditsSection4 = CreditsTab:NewSection("Helper: wYn#0001 (Youtube Guides)")
+local CreditsSection = CreditsTab:NewSection("--------------------- Hatchers Hub MS2 ---------------------")
+local CreditsSection1 = CreditsTab:NewSection("Creator/Dev: PetSimulatorXPlayer#5011")
+local CreditsSection2 = CreditsTab:NewSection("Helper: Cor#0002")
+local CreditsSection3 = CreditsTab:NewSection("Helper: wYn#0001 (Youtube Guides)")
+local CreditsSection4 = CreditsTab:NewSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:NewSection("-------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-10-11")
-local CreditsSection7 = CreditsTab:NewSection("Last Update: New GUI Name + Buy Halloween Boosts")
+local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-10-26")
+local CreditsSection7 = CreditsTab:NewSection("Last Update: New Sections + More!")
 local CreditsSection8 = CreditsTab:NewSection("Upcoming Update: More New Features")
+local CreditsSection9 = CreditsTab:NewSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:NewSection("-------------------------------------------------------------------")
 
 -- AutofarmUI
@@ -266,9 +268,22 @@ local AutoTeleportSection = EggFarmingTab:NewSection("Auto Teleport To Egg")
 local MiscTab = Window:NewTab("Miscellaneous")
 local MiscFeaturesSelection = MiscTab:NewSection("Miscellaneous Features")
 
+-- Other GUI's
+local OtherUITab = Window:NewTab("Other GUI's")
+local NotMyGUISection = OtherUITab:NewSection("I do NOT OWN these GUIS! Credits to the devs")
+local CorsGUISection = OtherUITab:NewSection("Cor's OP GUI")
+local SystemExodusSection = OtherUITab:NewSection("System Exodus")
+
 -- SettingsUI
 local SettingsTab = Window:NewTab("Settings")
-local SettingsSection = SettingsTab:NewSection("Setting Options")
+local SettingsSection = SettingsTab:NewSection("Setting Options (Settings Save Per Account)")
+
+-- HelpUI
+local HelpTab = Window:NewTab("Help")
+local DiscordlinkSection = HelpTab:NewSection("Need help with the GUI? Join the Discord for help!")
+local SaveSettingsSection = HelpTab:NewSection("Settings that are saveable")
+local NoSaveSettingsSection = HelpTab:NewSection("Settings that are not saveable")
+local TextBoxHelpSection = HelpTab:NewSection("Press the ENTER key after typing in the textboxes")
 
 -- TogglesUI
 local TogglesTab = Window:NewTab("Toggles")
@@ -300,6 +315,7 @@ AutoFarmSelection:NewToggle("Auto Factory Craft", "Auto Crafts Gems of your choo
         AutoFactoryCraft3()
     end
 end)
+
 
 --EggFarming
 AutoHatchEggSection:NewTextBox("Choose Egg: ", "Choose what egg you want to hatch (Case Sensitive!)", function(EggTypetxt)
@@ -336,6 +352,7 @@ AutoTeleportSection:NewButton("Teleport To Egg", "Teleports You To The Selected 
     end
 end)
 
+
 -- Misc 
 MiscFeaturesSelection:NewButton("Anti AFK", "Allows you to AFK Forever", function()
     local bb=game:service'VirtualUser'
@@ -343,6 +360,19 @@ MiscFeaturesSelection:NewButton("Anti AFK", "Allows you to AFK Forever", functio
     bb:CaptureController()bb:ClickButton2(Vector2.new())
     end)
 end)
+
+-- Other Gui's 
+CorsGUISection:NewDropdown("Cor's OP GUI Features:", "Most Of Cor's Op GUI's Features", {"Auto farm Blocks", "Egg Hatching", "Auto Collect Ores", "Auto Sell/Teleport", "AntiAFK", "Auto Trick Or Treat (OP)", "Auto Factory", "Fake Pet Equip", "Fake Pet Hatch", "Mass Delete Pets", "Auto Shiny", "Unlock/Teleport To Any Layer", "Pet Hatcher", "Stats Tracker", "Remote UI's", "Skip Animation", "SO MUCH MORE!"}, function()
+end)
+CorsGUISection:NewButton("Activate Script", "Executes the Script", function()
+    loadstring(game:HttpGet(("https://raw.githubusercontent.com/wingedmother69/thingz/main/ms2ui.lua"),true))()
+end)
+SystemExodusSection:NewDropdown("System Exodus Features:", "Most Of System Exodus Features", {"Auto Farm Blocks (3x3)", "Auto Farm Eggs", "Pet Hatcher", "Auto Factory", "Auto Open Crates", "Auto Trick Or Treat", "Auto Claim Group Rewards", "Auto Delete Pets", "Statistics", "Skip Animation", "WAY MORE!"}, function()
+end)
+SystemExodusSection:NewButton("Activate Script", "Executes the Script", function()
+    loadstring(game:HttpGet("https://www.system-exodus.com/scripts/MiningSimulator/MiningSimulator2.lua"))()
+end)
+
 
 --Settings
 SettingsSection:NewButton("See Settings", "Shows Your Current Settings (Type /console in chat)", function()
@@ -363,10 +393,27 @@ SettingsSection:NewButton("Load Settings", "Loads your saved Settings", function
     CheckSettings()
 end)
 
+
+-- help
+DiscordlinkSection:NewButton("Discord Invite", "Click to recieve an invite to the discord server", function()
+    (syn and syn.request or http_request or request)({ Url = "http://127.0.0.1:6463/rpc?v=1",
+            Method = "POST",Headers = {["Content-Type"] = "application/json",
+                ["Origin"] = "https://discord.com"},
+                    Body = game:GetService("HttpService"):JSONEncode({cmd = "INVITE_BROWSER",
+                        args = {code = "83aFw8rGM8"},
+                            nonce = game:GetService("HttpService"):GenerateGUID(false)})})
+end)
+SaveSettingsSection:NewDropdown("Settings:", "Settings that will be saved", {"Craft Option", "Auto Factory Craft", "Auto Collect Group Rewards", "Auto Buy Halloween Boosts", "Choose Egg: (Hatching)", "Quad/Multi Hatch", "Start Hatching Egg", "Skip Animation", "Disable Skip Animation", "Choose Egg: (Teleport)", "World", "Teleport To Egg"}, function()
+end)
+NoSaveSettingsSection:NewDropdown("Settings", "Settings that will not be saved", {"AntiAFK", "All Other GUI's"}, function()
+end)
+
+
 -- Toggles
 ToggleUISection:NewKeybind("Toggle The UI", "Toggles The UI", Enum.KeyCode.F, function()
 	Library:ToggleUI()
 end)
+
 
 -- Formatting Counts
 function abb(Value)
