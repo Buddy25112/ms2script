@@ -237,7 +237,7 @@ end
 
 -- Library
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Hatchers Hub | Mining Simulator 2 | Version 1.0.0", "Midnight")
+local Window = Library.CreateLib("Hatchers Hub | Mining Simulator 2 | Version 1.0.1", "Midnight")
 
 -- CreditsUI
 local CreditsTab = Window:NewTab("Credits")
@@ -247,9 +247,9 @@ local CreditsSection2 = CreditsTab:NewSection("Helper: Cor#0002")
 local CreditsSection3 = CreditsTab:NewSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection4 = CreditsTab:NewSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:NewSection("-------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-10-26")
-local CreditsSection7 = CreditsTab:NewSection("Last Update: New Sections + More!")
-local CreditsSection8 = CreditsTab:NewSection("Upcoming Update: More New Features")
+local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-11-04")
+local CreditsSection7 = CreditsTab:NewSection("Last Update: Changed 'Cor' to 'Tense' (OTHER GUIS)")
+local CreditsSection8 = CreditsTab:NewSection("Upcoming Update: Auto Enable ANTI AFK, Remove Halloween Features")
 local CreditsSection9 = CreditsTab:NewSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:NewSection("-------------------------------------------------------------------")
 
@@ -271,7 +271,7 @@ local MiscFeaturesSelection = MiscTab:NewSection("Miscellaneous Features")
 -- Other GUI's
 local OtherUITab = Window:NewTab("Other GUI's")
 local NotMyGUISection = OtherUITab:NewSection("I do NOT OWN these GUIS! Credits to the devs")
-local CorsGUISection = OtherUITab:NewSection("Cor's OP GUI")
+local CorsGUISection = OtherUITab:NewSection("Tense's OP GUI")
 local SystemExodusSection = OtherUITab:NewSection("System Exodus")
 
 -- SettingsUI
@@ -362,7 +362,7 @@ MiscFeaturesSelection:NewButton("Anti AFK", "Allows you to AFK Forever", functio
 end)
 
 -- Other Gui's 
-CorsGUISection:NewDropdown("Cor's OP GUI Features:", "Most Of Cor's Op GUI's Features", {"Auto farm Blocks", "Egg Hatching", "Auto Collect Ores", "Auto Sell/Teleport", "AntiAFK", "Auto Trick Or Treat (OP)", "Auto Factory", "Fake Pet Equip", "Fake Pet Hatch", "Mass Delete Pets", "Auto Shiny", "Unlock/Teleport To Any Layer", "Pet Hatcher", "Stats Tracker", "Remote UI's", "Skip Animation", "SO MUCH MORE!"}, function()
+CorsGUISection:NewDropdown("Tense's OP GUI Features:", "Most Of Tense's Op GUI's Features", {"Auto farm Blocks", "Egg Hatching", "Auto Collect Ores", "Auto Sell/Teleport", "AntiAFK", "Auto Trick Or Treat (OP)", "Auto Factory", "Fake Pet Equip", "Fake Pet Hatch", "Mass Delete Pets", "Auto Shiny", "Unlock/Teleport To Any Layer", "Pet Hatcher", "Stats Tracker", "Remote UI's", "Skip Animation", "SO MUCH MORE!"}, function()
 end)
 CorsGUISection:NewButton("Activate Script", "Executes the Script", function()
     loadstring(game:HttpGet(("https://raw.githubusercontent.com/wingedmother69/thingz/main/ms2ui.lua"),true))()
