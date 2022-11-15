@@ -20,6 +20,11 @@ _G.SecretsList = {
     TotalSecretsHatched = 0;
 }
 
+local bb=game:service'VirtualUser'
+game:service'Players'.LocalPlayer.Idled:connect(function()
+bb:CaptureController()bb:ClickButton2(Vector2.new())
+end)
+
 local username = game:GetService("Players").LocalPlayer.Name
 
 local SettingsTableName = username .. "_Settings_MS2.txt"
@@ -543,9 +548,3 @@ while wait() do
     count = game:GetService("Players")[username].leaderstats.Eggs.Value
     EggsLabel:UpdateLabel("Eggs Hatched: " .. abb(count) .. " | Secrets Hatched: " .. abb(_G.SecretsList.TotalSecretsHatched))
 end
-
--- Random Other Stuff
-local bb=game:service'VirtualUser'
-game:service'Players'.LocalPlayer.Idled:connect(function()
-bb:CaptureController()bb:ClickButton2(Vector2.new())
-end)
