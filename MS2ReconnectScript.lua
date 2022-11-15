@@ -4,19 +4,26 @@ _G.SettingsTable = {
     EggType = "";
     EggTP = "";
     WorldOption = "";
+    LayerOption = "";
+    InstantWorldOption = "";
     GemType = "";
     MultiHatch = false;
     BuyEgg = false;
     SkipAnimation = false;
     AutoCraft = false;
-    BuyHalloweenBoost = false;
+    BuyShopBoosts = false;
 
     
+}
+
+_G.SecretsList = {
+    TotalSecretsHatched = 0;
 }
 
 local username = game:GetService("Players").LocalPlayer.Name
 
 local SettingsTableName = username .. "_Settings_MS2.txt"
+local SecretsListName = username .. "_SecretsList_MS2.txt"
 
 function SaveSettingsTableSettings()
     local json
@@ -47,6 +54,22 @@ function LoadSettingsTableSettings()
                 Duration = 5
             }
         )
+    end
+end
+
+function SaveSettingsSecretsList()
+    local json
+    local HttpService = game:GetService("HttpService")
+    if (writefile) then
+        json = HttpService:JSONEncode(_G.SecretsList)
+        writefile(SecretsListName, json)
+    end
+end
+
+function LoadSettingsSecretsList()
+    local HttpService = game:GetService("HttpService")
+    if (readfile and isfile and isfile(SecretsListName)) then
+        _G.SecretsList = HttpService:JSONDecode(readfile(SecretsListName))
     end
 end
 
@@ -100,41 +123,62 @@ function ClaimGroupBenefits()
     end)
 end
 
-function BuyHalloweenBoosts1()
+function BuyLuckyBoosts()
     spawn(function()
         while wait(5) do
-            if not _G.SettingsTable.BuyHalloweenBoost then break end
+            if not _G.SettingsTable.BuyShopBoosts then break end
             local args = {
-                [1] = "boost0"
+                [1] = "Lucky",
+                [2] = 1
             }
-            
-            game:GetService("ReplicatedStorage").Events.BuyEventShopItem:FireServer(unpack(args))
+
+            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Lucky",
+                [2] = 2
+            }
+
+            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
         end
     end)
 end
 
-function BuyHalloweenBoosts2()
+function BuySuperLuckyBoosts()
     spawn(function()
         while wait(5) do
-            if not _G.SettingsTable.BuyHalloweenBoost then break end
+            if not _G.SettingsTable.BuyShopBoosts then break end
             local args = {
-                [1] = "boost1"
+                [1] = "Super Lucky",
+                [2] = 1
             }
-            
-            game:GetService("ReplicatedStorage").Events.BuyEventShopItem:FireServer(unpack(args))
+
+            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Super Lucky",
+                [2] = 2
+            }
+
+            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
         end
     end)
 end
 
-function BuyHalloweenBoosts3()
+function BuyOmegaLuckyBoosts()
     spawn(function()
         while wait(5) do
-            if not _G.SettingsTable.BuyHalloweenBoost then break end
+            if not _G.SettingsTable.BuyShopBoosts then break end
             local args = {
-                [1] = "boost2"
+                [1] = "Omega Lucky",
+                [2] = 1
             }
-            
-            game:GetService("ReplicatedStorage").Events.BuyEventShopItem:FireServer(unpack(args))
+
+            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 2
+            }
+
+            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
         end
     end)
 end
@@ -199,6 +243,36 @@ function AutoFactoryCraft3()
     end)
 end
 
+function TeleportToLayer()
+    spawn(function()
+        local args = {
+            [1] = _G.SettingsTable.LayerOption
+        }
+
+        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+    end)
+end
+
+function UnlockLayer()
+    spawn(function()
+        local args = {
+            [1] = _G.SettingsTable.LayerOption .. "Sell"
+        }
+
+        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+    end)
+end
+
+function InstantTeleportToLayer()
+    spawn(function()
+        local args = {
+            [1] = _G.SettingsTable.InstantWorldOption
+        }
+        
+        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+    end)
+end
+
 function CheckSettings()
     spawn(function()
         if _G.SettingsTable.GiftReward then
@@ -211,14 +285,15 @@ function CheckSettings()
 end
 
 LoadSettingsTableSettings()
+LoadSettingsSecretsList()
 
 if _G.SettingsTable.SkipAnimation then
     SkipAnimation()
 end
-if _G.SettingsTable.BuyHalloweenBoost then
-    BuyHalloweenBoosts1()
-    BuyHalloweenBoosts2()
-    BuyHalloweenBoosts3()
+if _G.SettingsTable.BuyShopBoosts then
+    BuyLuckyBoosts()
+    BuySuperLuckyBoosts()
+    BuyOmegaLuckyBoosts()
 end
 if _G.SettingsTable.AutoCraft then
     AutoFactoryCraft1()
@@ -235,9 +310,33 @@ if _G.SettingsTable.TpToEgg then
     TweenToEgg()
 end
 
+local Headers = {["content-type"] = "application/json"}
+local Chat = game:GetService("Players").LocalPlayer.PlayerGui.Chat.Frame.ChatChannelParentFrame["Frame_MessageLogDisplay"].Scroller
+
+-- The Main Function
+local SecretsHatched
+Chat.ChildAdded:Connect(function(instance)
+    if string.find(instance.TextLabel.Text,"Server") then
+            if string.find(instance.TextLabel.Text,"just") then
+                if string.find(instance.TextLabel.Text,"hatched") then
+                    if string.find(instance.TextLabel.Text,"a") then
+                        if string.find(instance.TextLabel.Text, game:GetService("Players").LocalPlayer.Name) then
+                            if string.find(instance.TextLabel.Text, "Secret") or string.find(instance.TextLabel.Text, "ANCIENT") then
+                                LoadSettingsSecretsList()
+                                SecretsHatched = _G.SecretsList.TotalSecretsHatched + 1
+                                _G.SecretsList.TotalSecretsHatched = SecretsHatched
+                                SaveSettingsSecretsList()
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
 -- Library
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Hatchers Hub | Mining Simulator 2 | Version 1.0.1", "Midnight")
+local Window = Library.CreateLib("Hatchers Hub | Mining Simulator 2 | Version 1.0.2", "Midnight")
 
 -- CreditsUI
 local CreditsTab = Window:NewTab("Credits")
@@ -247,9 +346,9 @@ local CreditsSection2 = CreditsTab:NewSection("Helper: Cor#0002")
 local CreditsSection3 = CreditsTab:NewSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection4 = CreditsTab:NewSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:NewSection("-------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-11-04")
-local CreditsSection7 = CreditsTab:NewSection("Last Update: Changed 'Cor' to 'Tense' (OTHER GUIS)")
-local CreditsSection8 = CreditsTab:NewSection("Upcoming Update: Auto Enable ANTI AFK, Remove Halloween Features")
+local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-11-14")
+local CreditsSection7 = CreditsTab:NewSection("Last Update: 'Secrets Hatched' Counter + More!")
+local CreditsSection8 = CreditsTab:NewSection("Upcoming Update: More New Features")
 local CreditsSection9 = CreditsTab:NewSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:NewSection("-------------------------------------------------------------------")
 
@@ -266,7 +365,9 @@ local AutoTeleportSection = EggFarmingTab:NewSection("Auto Teleport To Egg")
 
 -- MiscUI
 local MiscTab = Window:NewTab("Miscellaneous")
-local MiscFeaturesSelection = MiscTab:NewSection("Miscellaneous Features")
+local LayersSection = MiscTab:NewSection("Layers")
+local WorldsSection = MiscTab:NewSection("Worlds")
+local OtherStuffSection = MiscTab:NewSection("More Stuff Coming Soon!")
 
 -- Other GUI's
 local OtherUITab = Window:NewTab("Other GUI's")
@@ -296,12 +397,12 @@ AutoGroupRewardsSection:NewToggle("Auto Collect Group Rewards", "Auto Collects G
         ClaimGroupBenefits()
     end
 end)
-AutoGroupRewardsSection:NewToggle("Auto Buy Halloween Boosts", "Auto Buys halloween boosts", function(bool)
-    _G.SettingsTable.BuyHalloweenBoost = bool
+AutoGroupRewardsSection:NewToggle("Auto Buy Shop Boosts", "Auto Buys Shop boosts", function(bool)
+    _G.SettingsTable.BuyShopBoosts = bool
     if bool then
-        BuyHalloweenBoosts1()
-        BuyHalloweenBoosts2()
-        BuyHalloweenBoosts3()
+        BuyLuckyBoosts()
+        BuySuperLuckyBoosts()
+        BuyOmegaLuckyBoosts()
     end
 end)
 AutoFarmSelection:NewDropdown("Craft Option", "Select Which Type you want to craft in factory", {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5"}, function(GemTypetxt)
@@ -354,11 +455,20 @@ end)
 
 
 -- Misc 
-MiscFeaturesSelection:NewButton("Anti AFK", "Allows you to AFK Forever", function()
-    local bb=game:service'VirtualUser'
-    game:service'Players'.LocalPlayer.Idled:connect(function()
-    bb:CaptureController()bb:ClickButton2(Vector2.new())
-    end)
+LayersSection:NewDropdown("World", "Select a place to tp / unlock", {"Hidden Treasure", "Frozen Depths", "Gloomy Basin", "Molten Core", "The Underworld", "Crystal Cavern", "Cyber Sewers", "Cosmic Abyss", "Cyber Core", "Glitched Chasm", "Rocky Depths", "Sea Shell Shallows", "City of Gold", "Dark Coral Depths", "Chocolate Caves", "Gummy Depths", "Cupcake Cavern", "Donut Depths", "Blocky Basin", "Bear Depths", "Building Depths"}, function(LayerTextOption)
+    _G.SettingsTable.LayerOption = LayerTextOption
+end)
+LayersSection:NewButton("Teleport to Layer", "Teleports you to the selected layer", function()
+    TeleportToLayer()
+end)
+LayersSection:NewButton("Unlock Layer", "Unlocks the selected layer", function()
+    UnlockLayer()
+end)
+WorldsSection:NewDropdown("World", "Select Which World To TP To", {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "GemGenie"}, function(InstantWorldTextOption)
+    _G.SettingsTable.InstantWorldOption = InstantWorldTextOption
+end)
+WorldsSection:NewButton("Teleport To World", "Teleports you to the selected world", function()
+    InstantTeleportToLayer()
 end)
 
 -- Other Gui's 
@@ -394,7 +504,7 @@ SettingsSection:NewButton("Load Settings", "Loads your saved Settings", function
 end)
 
 
--- help
+-- Help
 DiscordlinkSection:NewButton("Discord Invite", "Click to recieve an invite to the discord server", function()
     (syn and syn.request or http_request or request)({ Url = "http://127.0.0.1:6463/rpc?v=1",
             Method = "POST",Headers = {["Content-Type"] = "application/json",
@@ -403,9 +513,9 @@ DiscordlinkSection:NewButton("Discord Invite", "Click to recieve an invite to th
                         args = {code = "83aFw8rGM8"},
                             nonce = game:GetService("HttpService"):GenerateGUID(false)})})
 end)
-SaveSettingsSection:NewDropdown("Settings:", "Settings that will be saved", {"Craft Option", "Auto Factory Craft", "Auto Collect Group Rewards", "Auto Buy Halloween Boosts", "Choose Egg: (Hatching)", "Quad/Multi Hatch", "Start Hatching Egg", "Skip Animation", "Disable Skip Animation", "Choose Egg: (Teleport)", "World", "Teleport To Egg"}, function()
+SaveSettingsSection:NewDropdown("Settings:", "Settings that will be saved", {"Craft Option", "Auto Factory Craft", "Auto Collect Group Rewards", "Auto Buy Shop Boosts", "Choose Egg: (Hatching)", "Quad/Multi Hatch", "Start Hatching Egg", "Skip Animation", "Disable Skip Animation", "Choose Egg: (Teleport)", "Select World (Egg Teleport)", "Teleport To Egg"}, function()
 end)
-NoSaveSettingsSection:NewDropdown("Settings", "Settings that will not be saved", {"AntiAFK", "All Other GUI's"}, function()
+NoSaveSettingsSection:NewDropdown("Settings", "Settings that will not be saved", {"All Other GUI's", "Select Layer (Teleport/Unlock)","Teleport To Layer","Unlock Layer", "Select World (Instant TP)", "Teleport to world"}, function()
 end)
 
 
@@ -431,5 +541,11 @@ while wait() do
     local plr = game.Players.LocalPlayer
     local count = 0
     count = game:GetService("Players")[username].leaderstats.Eggs.Value
-    EggsLabel:UpdateLabel("Eggs Hatched: " .. abb(count))
+    EggsLabel:UpdateLabel("Eggs Hatched: " .. abb(count) .. " | Secrets Hatched: " .. abb(_G.SecretsList.TotalSecretsHatched))
 end
+
+-- Random Other Stuff
+local bb=game:service'VirtualUser'
+game:service'Players'.LocalPlayer.Idled:connect(function()
+bb:CaptureController()bb:ClickButton2(Vector2.new())
+end)
