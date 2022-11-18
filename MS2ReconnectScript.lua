@@ -448,7 +448,7 @@ end)
 AutoTeleportSection:NewTextBox("Choose Egg: ", "Choose what egg you want to tp to (Case Sensitive!)", function(Eggtptxt)
 	_G.SettingsTable.EggTP = Eggtptxt
 end)
-AutoTeleportSection:NewDropdown("World", "Select Which World To TP To", {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland"}, function(WorldTextOption)
+AutoTeleportSection:NewDropdown("World", "Select Which World To TP To", {"Surface", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland"}, function(WorldTextOption)
     _G.SettingsTable.WorldOption = WorldTextOption
 end)
 AutoTeleportSection:NewButton("Teleport To Egg", "Teleports You To The Selected Egg", function()
