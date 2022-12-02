@@ -410,7 +410,7 @@ AutoGroupRewardsSection:NewToggle("Auto Buy Shop Boosts", "Auto Buys Shop boosts
         BuyOmegaLuckyBoosts()
     end
 end)
-AutoFarmSelection:NewDropdown("Craft Option", "Select Which Type you want to craft in factory", {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5"}, function(GemTypetxt)
+AutoFarmSelection:NewDropdown("Craft Option", "Select Which Type you want to craft in factory", {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5", "Bricks 1", "Bricks 2", "Bricks 3", "Bricks 4", "Bricks 5"}, function(GemTypetxt)
     _G.SettingsTable.GemType = GemTypetxt
 end)
 AutoFarmSelection:NewToggle("Auto Factory Craft", "Auto Crafts Gems of your choosing", function(bool)
@@ -448,7 +448,7 @@ end)
 AutoTeleportSection:NewTextBox("Choose Egg: ", "Choose what egg you want to tp to (Case Sensitive!)", function(Eggtptxt)
 	_G.SettingsTable.EggTP = Eggtptxt
 end)
-AutoTeleportSection:NewDropdown("World", "Select Which World To TP To", {"Surface", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland"}, function(WorldTextOption)
+AutoTeleportSection:NewDropdown("World", "Select Which World To TP To", {"Surface", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Christmas World"}, function(WorldTextOption)
     _G.SettingsTable.WorldOption = WorldTextOption
 end)
 AutoTeleportSection:NewButton("Teleport To Egg", "Teleports You To The Selected Egg", function()
@@ -460,7 +460,7 @@ end)
 
 
 -- Misc 
-LayersSection:NewDropdown("World", "Select a place to tp / unlock", {"Hidden Treasure", "Frozen Depths", "Gloomy Basin", "Molten Core", "The Underworld", "Crystal Cavern", "Cyber Sewers", "Cosmic Abyss", "Cyber Core", "Glitched Chasm", "Rocky Depths", "Sea Shell Shallows", "City of Gold", "Dark Coral Depths", "Chocolate Caves", "Gummy Depths", "Cupcake Cavern", "Donut Depths", "Blocky Basin", "Bear Depths", "Building Depths"}, function(LayerTextOption)
+LayersSection:NewDropdown("World", "Select a place to tp / unlock", {"Hidden Treasure", "Frozen Depths", "Gloomy Basin", "Molten Core", "The Underworld", "Crystal Cavern", "Cyber Sewers", "Cosmic Abyss", "Cyber Core", "Glitched Chasm", "Rocky Depths", "Sea Shell Shallows", "City of Gold", "Dark Coral Depths", "Chocolate Caves", "Gummy Depths", "Cupcake Cavern", "Donut Depths", "Blocky Basin", "Bear Depths", "Building Depths", "Christmas World"}, function(LayerTextOption)
     _G.SettingsTable.LayerOption = LayerTextOption
 end)
 LayersSection:NewButton("Teleport to Layer", "Teleports you to the selected layer", function()
@@ -469,7 +469,7 @@ end)
 LayersSection:NewButton("Unlock Layer", "Unlocks the selected layer", function()
     UnlockLayer()
 end)
-WorldsSection:NewDropdown("World", "Select Which World To TP To", {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "GemGenie"}, function(InstantWorldTextOption)
+WorldsSection:NewDropdown("World", "Select Which World To TP To", {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "GemGenie", "Christmas World"}, function(InstantWorldTextOption)
     _G.SettingsTable.InstantWorldOption = InstantWorldTextOption
 end)
 WorldsSection:NewButton("Teleport To World", "Teleports you to the selected world", function()
