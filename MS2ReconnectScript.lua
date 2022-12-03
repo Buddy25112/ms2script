@@ -110,7 +110,7 @@ function TweenToEgg()
 	if _G.SettingsTable.WorldOption == "Christmas World" then
 		wait(1)
 		local args = {
-		    [1] = _G.SettingsTable.WorldOption
+		    [1] = "Surface"
 		}
 
 		game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
