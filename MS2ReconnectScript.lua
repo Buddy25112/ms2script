@@ -107,6 +107,14 @@ function TweenToEgg()
         }
         
         game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+	if _G.SettingsTable.WorldOption == "Christmas World" then
+		wait(1)
+		local args = {
+		    [1] = _G.SettingsTable.WorldOption
+		}
+
+		game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+	end
         
         wait(5)
         local New_CFrame = game:GetService("Workspace").Eggs[_G.SettingsTable.EggTP].Price.CFrame
