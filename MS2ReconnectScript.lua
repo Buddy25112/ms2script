@@ -12,6 +12,7 @@ _G.SettingsTable = {
     SkipAnimation = false;
     AutoCraft = false;
     BuyShopBoosts = false;
+    BuyChristmasBoost = false;
 
     
 }
@@ -196,6 +197,45 @@ function BuyOmegaLuckyBoosts()
     end)
 end
 
+function BuyChristmasBoosts1()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.BuyChristmasBoost then break end
+            local args = {
+                [1] = "boost0"
+            }
+            
+            game:GetService("ReplicatedStorage").Events.BuyEventShopItem:FireServer(unpack(args))
+        end
+    end)
+end
+
+function BuyChristmasBoosts2()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.BuyChristmasBoost then break end
+            local args = {
+                [1] = "boost1"
+            }
+
+            game:GetService("ReplicatedStorage").Events.BuyEventShopItem:FireServer(unpack(args))
+        end
+    end)
+end
+
+function BuyChristmasBoosts3()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.BuyChristmasBoost then break end
+            local args = {
+                [1] = "boost2"
+            }
+
+            game:GetService("ReplicatedStorage").Events.BuyEventShopItem:FireServer(unpack(args))
+        end
+    end)
+end
+
 function AutoFactoryCraft1()
     spawn(function()
         while wait(30) do
@@ -313,6 +353,11 @@ if _G.SettingsTable.AutoCraft then
     AutoFactoryCraft2()
     AutoFactoryCraft3()
 end
+if _G.SettingsTable.BuyChristmasBoost then
+    BuyChristmasBoosts1()
+    BuyChristmasBoosts2()
+    BuyChristmasBoosts3()
+end
 if _G.SettingsTable.ClaimGroupBenefits then
     ClaimGroupBenefits()
 end
@@ -349,7 +394,7 @@ end)
 
 -- Library
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-local Window = Library.CreateLib("Hatchers Hub | Mining Simulator 2 | Version 1.0.2", "Midnight")
+local Window = Library.CreateLib("Hatchers Hub | Mining Simulator 2 | Version 1.0.3", "Midnight")
 
 -- CreditsUI
 local CreditsTab = Window:NewTab("Credits")
@@ -359,8 +404,8 @@ local CreditsSection2 = CreditsTab:NewSection("Helper: Cor#0002")
 local CreditsSection3 = CreditsTab:NewSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection4 = CreditsTab:NewSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:NewSection("-------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-11-14")
-local CreditsSection7 = CreditsTab:NewSection("Last Update: 'Secrets Hatched' Counter + More!")
+local CreditsSection6 = CreditsTab:NewSection("Last Updated: 2022-12-08")
+local CreditsSection7 = CreditsTab:NewSection("Last Update: Auto Buy Christmas Boosts")
 local CreditsSection8 = CreditsTab:NewSection("Upcoming Update: More New Features")
 local CreditsSection9 = CreditsTab:NewSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:NewSection("-------------------------------------------------------------------")
@@ -416,6 +461,14 @@ AutoGroupRewardsSection:NewToggle("Auto Buy Shop Boosts", "Auto Buys Shop boosts
         BuyLuckyBoosts()
         BuySuperLuckyBoosts()
         BuyOmegaLuckyBoosts()
+    end
+end)
+AutoGroupRewardsSection:NewToggle("Auto Buy Christmas Boosts", "Auto Buys Christmas boosts", function(bool)
+    _G.SettingsTable.BuyChristmasBoost = bool
+    if bool then
+        BuyChristmasBoosts1()
+        BuyChristmasBoosts2()
+        BuyChristmasBoosts3()
     end
 end)
 AutoFarmSelection:NewDropdown("Craft Option", "Select Which Type you want to craft in factory", {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5", "Bricks 1", "Bricks 2", "Bricks 3", "Bricks 4", "Bricks 5"}, function(GemTypetxt)
@@ -526,7 +579,7 @@ DiscordlinkSection:NewButton("Discord Invite", "Click to recieve an invite to th
                         args = {code = "83aFw8rGM8"},
                             nonce = game:GetService("HttpService"):GenerateGUID(false)})})
 end)
-SaveSettingsSection:NewDropdown("Settings:", "Settings that will be saved", {"Craft Option", "Auto Factory Craft", "Auto Collect Group Rewards", "Auto Buy Shop Boosts", "Choose Egg: (Hatching)", "Quad/Multi Hatch", "Start Hatching Egg", "Skip Animation", "Disable Skip Animation", "Choose Egg: (Teleport)", "Select World (Egg Teleport)", "Teleport To Egg"}, function()
+SaveSettingsSection:NewDropdown("Settings:", "Settings that will be saved", {"Craft Option", "Auto Buy Christmas Boosts", "Auto Factory Craft", "Auto Collect Group Rewards", "Auto Buy Shop Boosts", "Choose Egg: (Hatching)", "Quad/Multi Hatch", "Start Hatching Egg", "Skip Animation", "Disable Skip Animation", "Choose Egg: (Teleport)", "Select World (Egg Teleport)", "Teleport To Egg"}, function()
 end)
 NoSaveSettingsSection:NewDropdown("Settings", "Settings that will not be saved", {"All Other GUI's", "Select Layer (Teleport/Unlock)","Teleport To Layer","Unlock Layer", "Select World (Instant TP)", "Teleport to world"}, function()
 end)
