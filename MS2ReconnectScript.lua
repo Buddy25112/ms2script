@@ -19,6 +19,7 @@ _G.SettingsTable = {
     BuyOmegaLucky1Hour = false;
     BuyOmegaLucky2Hour = false;
     BuyChristmasBoost = false;
+    AutoCollectAdventCalandarRewards = false;
 
     
 }
@@ -82,6 +83,25 @@ function HatchEgg()
             }
 
             game:GetService("ReplicatedStorage").Events.OpenEgg:FireServer(unpack(args))
+        end
+    end)
+end
+
+function AutoClaimAdventCalandar()
+    spawn(function()
+        local AdventCalandarNumber = 1
+        while wait(1) do
+            if not _G.SettingsTable.BuyEgg then break end
+            local args = {
+                [1] = AdventCalandarNumber
+            }
+            
+            game:GetService("ReplicatedStorage").Events.AdventCalendarClaim:FireServer(unpack(args))
+            print(AdventCalandarNumber)
+            AdventCalandarNumber = AdventCalandarNumber + 1
+            if AdventCalandarNumber > 25 then
+                AdventCalandarNumber = 1
+            end
         end
     end)
 end
@@ -369,7 +389,7 @@ end)
 
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({
-	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.1.0",
+	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.1.1",
 	LoadingTitle = "Mining Simulator 2 GUI",
 	LoadingSubtitle = "By PetSimulatorXPlayer",
 	ConfigurationSaving = {
@@ -401,8 +421,8 @@ local CreditsSection2 = CreditsTab:CreateSection("Helper: Cor#0002")
 local CreditsSection3 = CreditsTab:CreateSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection4 = CreditsTab:CreateSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:CreateSection("--------------------------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2022-12-15")
-local CreditsSection7 = CreditsTab:CreateSection("Last Update: New GUI + Enhanced Everything + In Depth Auto Shop Boosts")
+local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2022-12-16")
+local CreditsSection7 = CreditsTab:CreateSection("Last Update: Auto Collect Advent Calandar Rewards")
 local CreditsSection8 = CreditsTab:CreateSection("Upcoming Update: More New Features")
 local CreditsSection9 = CreditsTab:CreateSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:CreateSection("-------------------------------------------------------------------------------------")
@@ -474,6 +494,18 @@ local AutoBuyChristmasBoosts = AutoFarmTab:CreateToggle({
         end
 	end,
 })
+local AutoCollectAdventCalandar = AutoFarmTab:CreateToggle({
+	Name = "Auto Collect Advent Calandar Rewards",
+	CurrentValue = false,
+	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(bool)
+        _G.SettingsTable.AutoCollectAdventCalandarRewards = bool
+        if bool then
+            AutoClaimAdventCalandar()
+        end
+	end,
+})
+
 local AutoShopBoostsSection = AutoFarmTab:CreateSection("Auto Shop Boosts")
 local AutoBuyLucky1Hours = AutoFarmTab:CreateToggle({
 	Name = "Auto Buy Lucky (1 Hour)",
@@ -737,6 +769,7 @@ function LoadSettingsTableSettings()
             AutoBuyChristmasBoosts:Set(_G.SettingsTable.BuyChristmasBoost)
             StartHatchingEgg:Set(_G.SettingsTable.BuyEgg)
             QuadOrMultiEggHatch:Set(_G.SettingsTable.MultiHatch)
+            AutoCollectAdventCalandar:Set(_G.SettingsTable.AutoCollectAdventCalandarRewards)
             print("Settings: Loaded")
             game.StarterGui:SetCore(
                 "SendNotification",
