@@ -693,7 +693,7 @@ local TeleportToWorld = MiscTab:CreateButton({
 	end,
 })
 local FPSSection = MiscTab:CreateSection("FPS Settings (Synapse Required)")
-local ChooseFPSValue = EggFarmingTab:CreateInput({
+local ChooseFPSValue = MiscTab:CreateInput({
 	Name = "Choose FPS Value:",
 	PlaceholderText = "Default = 60",
 	RemoveTextAfterFocusLost = false,
