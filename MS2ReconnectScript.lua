@@ -19,7 +19,7 @@ _G.SettingsTable = {
     BuyOmegaLucky2Hour = false;
     BuyChristmasBoost = false;
     AutoCollectAdventCalandarRewards = false;
-    FPSSettings = "60";
+    FPSSettings = 60;
 
     
 }
