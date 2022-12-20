@@ -1,4 +1,3 @@
--- New MS2 Script Library
 -- Variables
 _G.SettingsTable = {
     ClaimGroupBenefits = false;
@@ -20,6 +19,7 @@ _G.SettingsTable = {
     BuyOmegaLucky2Hour = false;
     BuyChristmasBoost = false;
     AutoCollectAdventCalandarRewards = false;
+    FPSSettings = "60";
 
     
 }
@@ -136,6 +136,12 @@ function TweenToEgg()
         local ti = TweenInfo.new(5, Enum.EasingStyle.Linear)
         local tp = {CFrame = New_CFrame}
         ts:Create(part, ti, tp):Play()
+    end)
+end
+
+function SetFPSValue()
+    spawn(function()
+        setfpscap(_G.SettingsTable.FPSSettings)
     end)
 end
 
@@ -686,6 +692,22 @@ local TeleportToWorld = MiscTab:CreateButton({
         InstantTeleportToLayer()
 	end,
 })
+local FPSSection = MiscTab:CreateSection("FPS Settings (Synapse Required)")
+local ChooseFPSValue = EggFarmingTab:CreateInput({
+	Name = "Choose FPS Value:",
+	PlaceholderText = "Default = 60",
+	RemoveTextAfterFocusLost = false,
+	Callback = function(FPStxt)
+		_G.SettingsTable.FPSSettings = FPStxt
+	end,
+})
+local SetFPSValues = MiscTab:CreateButton({
+	Name = "Set FPS Value",
+	Callback = function()
+        SetFPSValue()
+	end,
+})
+
 
 -- Other Gui's 
 local NotMyGUISection = OtherUITab:CreateSection("I do NOT OWN these GUIS! Credits to the devs")
@@ -795,6 +817,7 @@ function LoadSettingsTableSettings()
 end
 
 LoadSettingsTableSettings()
+SetFPSValue()
 
 if _G.SettingsTable.TpToEgg then
     TweenToEgg()
