@@ -615,7 +615,7 @@ local SkipAnimation = EggFarmingTab:CreateButton({
 	Callback = function()
         _G.SettingsTable.SkipAnimation = true
         if _G.SettingsTable.SkipAnimation then
-            SkipAnimation()
+            SkipAnimation1()
         end
 	end,
 })
