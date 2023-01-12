@@ -1,3 +1,6 @@
+-- Mining Simulator 2 Gui
+repeat task.wait() until game:IsLoaded()
+
 -- Variables
 _G.SettingsTable = {
     ClaimGroupBenefits = false;
@@ -18,25 +21,31 @@ _G.SettingsTable = {
     BuyOmegaLucky1Hour = false;
     BuyOmegaLucky2Hour = false;
     BuyChristmasBoost = false;
-    AutoCollectAdventCalandarRewards = false;
-    FPSSettings = 60;
-
-    
+    FPSSettings = "60";   
 }
-
 _G.SecretsList = {
     TotalSecretsHatched = 0;
 }
 
+-- Locals
+local username = game:GetService("Players").LocalPlayer.Name
+local SettingsTableName = username .. "_Settings_MS2.txt"
+local SecretsListName = username .. "_SecretsList_MS2.txt"
 local bb=game:service'VirtualUser'
 game:service'Players'.LocalPlayer.Idled:connect(function()
 bb:CaptureController()bb:ClickButton2(Vector2.new())
 end)
+local CoinsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Coins.Label.text
+local SpaceCoinsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.CyberTokens.Label.text
+local ShellsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Shells.Label.text
+local CandyCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Candy.Label.text
+local BricksCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Bricks.Label.text
 
-local username = game:GetService("Players").LocalPlayer.Name
-
-local SettingsTableName = username .. "_Settings_MS2.txt"
-local SecretsListName = username .. "_SecretsList_MS2.txt"
+-- Functions
+function FormatCurrency(CurrencyC)
+    local CC = CurrencyC:gsub("%$", ""):gsub("+", "")
+    return CC
+end
 
 function SaveSettingsTableSettings()
     local json
@@ -83,25 +92,6 @@ function HatchEgg()
             }
 
             game:GetService("ReplicatedStorage").Events.OpenEgg:FireServer(unpack(args))
-        end
-    end)
-end
-
-function AutoClaimAdventCalandar()
-    spawn(function()
-        local AdventCalandarNumber = 1
-        while wait(1) do
-            if not _G.SettingsTable.BuyEgg then break end
-            local args = {
-                [1] = AdventCalandarNumber
-            }
-            
-            game:GetService("ReplicatedStorage").Events.AdventCalendarClaim:FireServer(unpack(args))
-            print(AdventCalandarNumber)
-            AdventCalandarNumber = AdventCalandarNumber + 1
-            if AdventCalandarNumber > 25 then
-                AdventCalandarNumber = 1
-            end
         end
     end)
 end
@@ -395,7 +385,7 @@ end)
 
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({
-	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.1.1",
+	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.1.2",
 	LoadingTitle = "Mining Simulator 2 GUI",
 	LoadingSubtitle = "By PetSimulatorXPlayer",
 	ConfigurationSaving = {
@@ -427,8 +417,8 @@ local CreditsSection2 = CreditsTab:CreateSection("Helper: Cor#0002")
 local CreditsSection3 = CreditsTab:CreateSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection4 = CreditsTab:CreateSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:CreateSection("--------------------------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2022-12-19")
-local CreditsSection7 = CreditsTab:CreateSection("Last Update: Added FPS Settings")
+local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-01-12")
+local CreditsSection7 = CreditsTab:CreateSection("Last Update: All World Currency Counts Textbox")
 local CreditsSection8 = CreditsTab:CreateSection("Upcoming Update: More New Features")
 local CreditsSection9 = CreditsTab:CreateSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:CreateSection("-------------------------------------------------------------------------------------")
@@ -453,6 +443,11 @@ local HelpTab = Window:CreateTab("Help")
 
 -- AutoFarm
 local AutoFarmSelection = AutoFarmTab:CreateSection("Auto Farm Gems (Factory)")
+local CurrencyParagraph = AutoFarmTab:CreateParagraph({
+    Title = "All World Currency Counts", 
+    Content = "Coins: " .. FormatCurrency(CoinsCount) .. "\nCyber Tokens: " .. FormatCurrency(SpaceCoinsCount) .. "\nShells: " .. FormatCurrency(ShellsCount) .. "\nCandy: " .. FormatCurrency(CandyCount) .. "\nBricks: " .. FormatCurrency(BricksCount)
+})
+
 local CraftOption = AutoFarmTab:CreateDropdown({
 	Name = "Craft Option (Factory)",
 	Options = {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5", "Bricks 1", "Bricks 2", "Bricks 3", "Bricks 4", "Bricks 5"},
@@ -497,17 +492,6 @@ local AutoBuyChristmasBoosts = AutoFarmTab:CreateToggle({
             BuyChristmasBoosts1()
             BuyChristmasBoosts2()
             BuyChristmasBoosts3()
-        end
-	end,
-})
-local AutoCollectAdventCalandar = AutoFarmTab:CreateToggle({
-	Name = "Auto Collect Advent Calandar Rewards",
-	CurrentValue = false,
-	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(bool)
-        _G.SettingsTable.AutoCollectAdventCalandarRewards = bool
-        if bool then
-            AutoClaimAdventCalandar()
         end
 	end,
 })
@@ -615,7 +599,7 @@ local SkipAnimation = EggFarmingTab:CreateButton({
 	Callback = function()
         _G.SettingsTable.SkipAnimation = true
         if _G.SettingsTable.SkipAnimation then
-            SkipAnimation1()
+            SkipAnimation()
         end
 	end,
 })
@@ -636,7 +620,7 @@ local ChooseEggToTP = EggFarmingTab:CreateInput({
 })
 local WorldToTweenTo = EggFarmingTab:CreateDropdown({
 	Name = "World",
-	Options = {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Christmas World"},
+	Options = {"Surface", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Christmas World"},
 	CurrentOption = "Surface",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(WorldTextOption)
@@ -791,7 +775,6 @@ function LoadSettingsTableSettings()
             AutoBuyChristmasBoosts:Set(_G.SettingsTable.BuyChristmasBoost)
             StartHatchingEgg:Set(_G.SettingsTable.BuyEgg)
             QuadOrMultiEggHatch:Set(_G.SettingsTable.MultiHatch)
-            AutoCollectAdventCalandar:Set(_G.SettingsTable.AutoCollectAdventCalandarRewards)
             print("Settings: Loaded")
             game.StarterGui:SetCore(
                 "SendNotification",
@@ -871,6 +854,12 @@ while wait() do
     local count = 0
     count = game:GetService("Players")[username].leaderstats.Eggs.Value
     EggsLabel:Set("Eggs Hatched: " .. abb(count) .. " | Secrets Hatched: " .. abb(_G.SecretsList.TotalSecretsHatched))
+    local CoinsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Coins.Label.text
+    local SpaceCoinsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.CyberTokens.Label.text
+    local ShellsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Shells.Label.text
+    local CandyCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Candy.Label.text
+    local BricksCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Bricks.Label.text
+    CurrencyParagraph:Set({Title = "All World Currency Counts", Content = "Coins: " .. FormatCurrency(CoinsCount) .. "\nCyber Tokens: " .. FormatCurrency(SpaceCoinsCount) .. "\nShells: " .. FormatCurrency(ShellsCount) .. "\nCandy: " .. FormatCurrency(CandyCount) .. "\nBricks: " .. FormatCurrency(BricksCount)})
 end
 
 Rayfield:LoadConfiguration()
