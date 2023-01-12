@@ -20,7 +20,6 @@ _G.SettingsTable = {
     BuySuperLucky2Hour = false;
     BuyOmegaLucky1Hour = false;
     BuyOmegaLucky2Hour = false;
-    BuyChristmasBoost = false;
     FPSSettings = "60";   
 }
 _G.SecretsList = {
@@ -40,6 +39,7 @@ local SpaceCoinsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenG
 local ShellsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Shells.Label.text
 local CandyCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Candy.Label.text
 local BricksCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Bricks.Label.text
+local CrystalCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Crystals.Label.text
 
 -- Functions
 function FormatCurrency(CurrencyC)
@@ -385,7 +385,7 @@ end)
 
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({
-	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.1.2",
+	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.1.3",
 	LoadingTitle = "Mining Simulator 2 GUI",
 	LoadingSubtitle = "By PetSimulatorXPlayer",
 	ConfigurationSaving = {
@@ -418,7 +418,7 @@ local CreditsSection3 = CreditsTab:CreateSection("Helper: wYn#0001 (Youtube Guid
 local CreditsSection4 = CreditsTab:CreateSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:CreateSection("--------------------------------------------------------------------------------------")
 local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-01-12")
-local CreditsSection7 = CreditsTab:CreateSection("Last Update: All World Currency Counts Textbox")
+local CreditsSection7 = CreditsTab:CreateSection("Last Update: Updated existing settings")
 local CreditsSection8 = CreditsTab:CreateSection("Upcoming Update: More New Features")
 local CreditsSection9 = CreditsTab:CreateSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:CreateSection("-------------------------------------------------------------------------------------")
@@ -445,12 +445,12 @@ local HelpTab = Window:CreateTab("Help")
 local AutoFarmSelection = AutoFarmTab:CreateSection("Auto Farm Gems (Factory)")
 local CurrencyParagraph = AutoFarmTab:CreateParagraph({
     Title = "All World Currency Counts", 
-    Content = "Coins: " .. FormatCurrency(CoinsCount) .. "\nCyber Tokens: " .. FormatCurrency(SpaceCoinsCount) .. "\nShells: " .. FormatCurrency(ShellsCount) .. "\nCandy: " .. FormatCurrency(CandyCount) .. "\nBricks: " .. FormatCurrency(BricksCount)
+    Content = "Coins: " .. FormatCurrency(CoinsCount) .. "\nCyber Tokens: " .. FormatCurrency(SpaceCoinsCount) .. "\nShells: " .. FormatCurrency(ShellsCount) .. "\nCandy: " .. FormatCurrency(CandyCount) .. "\nBricks: " .. FormatCurrency(BricksCount) .. "\nCrystals: " .. FormatCurrency(CrystalCount)
 })
 
 local CraftOption = AutoFarmTab:CreateDropdown({
 	Name = "Craft Option (Factory)",
-	Options = {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5", "Bricks 1", "Bricks 2", "Bricks 3", "Bricks 4", "Bricks 5"},
+	Options = {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5", "Bricks 1", "Bricks 2", "Bricks 3", "Bricks 4", "Bricks 5", "Crystals 1", "Crystals 2", "Crystals 3", "Crystals 4", "Crystals 5"},
 	CurrentOption = "Coins 1",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(GemTypetxt)
@@ -482,19 +482,19 @@ local AutoCollectGroupRewards = AutoFarmTab:CreateToggle({
         end
 	end,
 })
-local AutoBuyChristmasBoosts = AutoFarmTab:CreateToggle({
-	Name = "Auto Buy Christmas Boosts",
-	CurrentValue = false,
-	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(bool)
-        _G.SettingsTable.BuyChristmasBoost = bool
-        if bool then
-            BuyChristmasBoosts1()
-            BuyChristmasBoosts2()
-            BuyChristmasBoosts3()
-        end
-	end,
-})
+-- local AutoBuyChristmasBoosts = AutoFarmTab:CreateToggle({
+-- 	Name = "Auto Buy Christmas Boosts",
+-- 	CurrentValue = false,
+-- 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+-- 	Callback = function(bool)
+--         _G.SettingsTable.BuyChristmasBoost = bool
+--         if bool then
+--             BuyChristmasBoosts1()
+--             BuyChristmasBoosts2()
+--             BuyChristmasBoosts3()
+--        end
+-- 	end,
+-- })
 
 local AutoShopBoostsSection = AutoFarmTab:CreateSection("Auto Shop Boosts")
 local AutoBuyLucky1Hours = AutoFarmTab:CreateToggle({
@@ -620,7 +620,7 @@ local ChooseEggToTP = EggFarmingTab:CreateInput({
 })
 local WorldToTweenTo = EggFarmingTab:CreateDropdown({
 	Name = "World",
-	Options = {"Surface", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Christmas World"},
+	Options = {"Surface", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Mystic Forest"},
 	CurrentOption = "Surface",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(WorldTextOption)
@@ -641,7 +641,7 @@ local TeleportToEgg = EggFarmingTab:CreateButton({
 local LayersSection = MiscTab:CreateSection("Layers")
 local LayerToTpTo = MiscTab:CreateDropdown({
 	Name = "Layer",
-	Options = {"Hidden Treasure", "Frozen Depths", "Gloomy Basin", "Molten Core", "The Underworld", "Crystal Cavern", "Cyber Sewers", "Cosmic Abyss", "Cyber Core", "Glitched Chasm", "Rocky Depths", "Sea Shell Shallows", "City of Gold", "Dark Coral Depths", "Chocolate Caves", "Gummy Depths", "Cupcake Cavern", "Donut Depths", "Blocky Basin", "Bear Depths", "Building Depths", "Christmas World"},
+	Options = {"Hidden Treasure", "Frozen Depths", "Gloomy Basin", "Molten Core", "The Underworld", "Crystal Cavern", "Cyber Sewers", "Cosmic Abyss", "Cyber Core", "Glitched Chasm", "Rocky Depths", "Sea Shell Shallows", "City of Gold", "Dark Coral Depths", "Chocolate Caves", "Gummy Depths", "Cupcake Cavern", "Donut Depths", "Blocky Basin", "Bear Depths", "Building Depths", "Pixel Park", "Glowing Depths", "Neon Rocks", "Mystic Cavern"},
 	CurrentOption = "Hidden Treasure",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(LayerTextOption)
@@ -663,7 +663,7 @@ local UnlockLayer = MiscTab:CreateButton({
 local WorldsSection = MiscTab:CreateSection("Worlds")
 local WorldToTpTo = MiscTab:CreateDropdown({
 	Name = "World",
-	Options = {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "GemGenie", "Christmas World"},
+	Options = {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "GemGenie", "Mystic Forest"},
 	CurrentOption = "The Overworld",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(InstantWorldTextOption)
@@ -742,7 +742,7 @@ local DiscordlinkInvite = HelpTab:CreateButton({
 local SaveSettingsSection = HelpTab:CreateSection("Settings that are saveable")
 local Settingsthataresaveable = HelpTab:CreateDropdown({
 	Name = "Settings:",
-	Options = {"Craft Option", "Auto Buy Christmas Boosts", "Auto Factory Craft", "Auto Collect Group Rewards", "Auto Buy Shop Boosts", "Choose Egg: (Hatching)", "Quad/Multi Hatch", "Start Hatching Egg", "Skip Animation", "Disable Skip Animation", "Choose Egg: (Teleport)", "Select World (Egg Teleport)", "Teleport To Egg"},
+	Options = {"Craft Option", "Auto Factory Craft", "Auto Collect Group Rewards", "Auto Buy Shop Boosts", "Choose Egg: (Hatching)", "Quad/Multi Hatch", "Start Hatching Egg", "Skip Animation", "Disable Skip Animation", "Choose Egg: (Teleport)", "Select World (Egg Teleport)", "Teleport To Egg"},
 	CurrentOption = "Settings that will be saved",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function()
@@ -772,7 +772,6 @@ function LoadSettingsTableSettings()
             AutoBuyLucky1Hours:Set(_G.SettingsTable.BuyLucky1Hour)
             AutoFactoryCraft:Set(_G.SettingsTable.AutoCraft)
             AutoCollectGroupRewards:Set(_G.SettingsTable.ClaimGroupBenefits)
-            AutoBuyChristmasBoosts:Set(_G.SettingsTable.BuyChristmasBoost)
             StartHatchingEgg:Set(_G.SettingsTable.BuyEgg)
             QuadOrMultiEggHatch:Set(_G.SettingsTable.MultiHatch)
             print("Settings: Loaded")
@@ -859,7 +858,8 @@ while wait() do
     local ShellsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Shells.Label.text
     local CandyCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Candy.Label.text
     local BricksCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Bricks.Label.text
-    CurrencyParagraph:Set({Title = "All World Currency Counts", Content = "Coins: " .. FormatCurrency(CoinsCount) .. "\nCyber Tokens: " .. FormatCurrency(SpaceCoinsCount) .. "\nShells: " .. FormatCurrency(ShellsCount) .. "\nCandy: " .. FormatCurrency(CandyCount) .. "\nBricks: " .. FormatCurrency(BricksCount)})
+    local CrystalCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Crystals.Label.text
+    CurrencyParagraph:Set({Title = "All World Currency Counts", Content = "Coins: " .. FormatCurrency(CoinsCount) .. "\nCyber Tokens: " .. FormatCurrency(SpaceCoinsCount) .. "\nShells: " .. FormatCurrency(ShellsCount) .. "\nCandy: " .. FormatCurrency(CandyCount) .. "\nBricks: " .. FormatCurrency(BricksCount) .. "\nCrystals: " .. FormatCurrency(CrystalCount)})
 end
 
 Rayfield:LoadConfiguration()
