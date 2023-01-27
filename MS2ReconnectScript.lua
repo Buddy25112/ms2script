@@ -125,12 +125,6 @@ function HatchEgg()
     end)
 end
 
-function SkipAnimation()
-    spawn(function()
-        game.ReplicatedStorage.ClientModules.Other.OpenEgg.HatchGui:Destroy()
-    end)
-end
-
 function TweenToEgg()
     spawn(function()
         local args = {
@@ -379,6 +373,12 @@ function UnlockLayer()
         }
 
         game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+    end)
+end
+
+function SkipAnimation()
+    spawn(function()
+        game.ReplicatedStorage.ClientModules.Other.OpenEgg.HatchGui:Destroy()
     end)
 end
 
@@ -1051,12 +1051,18 @@ end
 LoadSettingsTableSettings()
 SetFPSValue()
 
+function SkipAnimation1()
+    spawn(function()
+        game.ReplicatedStorage.ClientModules.Other.OpenEgg.HatchGui:Destroy()
+    end)
+end
+
 if _G.SettingsTable.TpToEgg then
     TweenToEgg()
     _G.PlaceHolders.AutoTeleportToEggPlaceHolder = "Yes"
 end
 if _G.SettingsTable.SkipAnimation then
-    SkipAnimation()
+    SkipAnimation1()
     _G.PlaceHolders.SkipAnimationPlaceHolder = "Activated"
 end
 if _G.SettingsTable.StatsTrackerActivated then
