@@ -781,7 +781,7 @@ local IntervalsText = StatsTrackerTab:CreateInput({
 	end,
 })
 local ColorDropdown = StatsTrackerTab:CreateDropdown({
-	Name = "Ember Color (Simple)",
+	Name = "Embed Color (Simple)",
 	Options = {"Red", "Orange", "Yellow", "Green", "Blue", "Purple"},
 	CurrentOption = "Red",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
