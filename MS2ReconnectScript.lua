@@ -646,7 +646,7 @@ local EggFarmingParagraph = EggFarmingTab:CreateParagraph({
 })
 local ChooseEggToHatchDropdown = EggFarmingTab:CreateDropdown({
 	Name = "Choose Egg: (Dropdown)",
-	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Pastel Egg", "Element Egg"},
+	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Mystery Egg v4"},
 	CurrentOption = "Basic Egg",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(EggTypetxt)
@@ -714,7 +714,7 @@ local AutoTeleportParagraph = EggFarmingTab:CreateParagraph({
 })
 local ChooseEggToTPDropdown = EggFarmingTab:CreateDropdown({
 	Name = "Choose Egg: (Dropdown)",
-	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Pastel Egg", "Element Egg"},
+	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Mystery Egg v4"},
 	CurrentOption = "Basic Egg",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Eggtptxt)
