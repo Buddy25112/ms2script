@@ -731,7 +731,7 @@ local ChooseEggToTPText = EggFarmingTab:CreateInput({
 })
 local WorldToTweenTo = EggFarmingTab:CreateDropdown({
 	Name = "World",
-	Options = {"Surface", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Mystic Forest"},
+	Options = {"Surface", "The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Mystic Forest"},
 	CurrentOption = "Surface",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(WorldTextOption)
