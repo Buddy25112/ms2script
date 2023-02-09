@@ -5,11 +5,15 @@ repeat task.wait() until game:IsLoaded()
 _G.SettingsTable = {
     ClaimGroupBenefits = false;
     EggType = "None";
+    BackupEggType = "None";
+    BackupEggTP = "None";
+    BackupWorldOption = "None";
     EggTP = "None";
     WorldOption = "None";
     LayerOption = "None";
     InstantWorldOption = "None";
     GemType = "None";
+    EnableBackup = false;
     MultiHatch = false;
     BuyEgg = false;
     SkipAnimation = false;
@@ -54,23 +58,171 @@ _G.PlaceHolders = {
     IntervalsPlaceHolder = "3600 (Default)";
     ColorPlaceHolder = "Default (Light Blue)";
     WebhookErrorPlaceHolder = "No";
+    EnableBackupPlaceHolder = "No";
+    BackupActive = "No";
 }
+
+-- Module Locals
+local LoadModule = require(game.ReplicatedStorage.LoadModule);
+local GetLocalData = LoadModule("LocalData");
+
+-- GetLocalData:GetData("Coins")
+
 -- Locals
 local username = game:GetService("Players").LocalPlayer.Name
 local SettingsTableName = username .. "_Settings_MS2.txt"
 local SecretsListName = username .. "_SecretsList_MS2.txt"
-local bb=game:service'VirtualUser'
-game:service'Players'.LocalPlayer.Idled:connect(function()
-bb:CaptureController()bb:ClickButton2(Vector2.new())
-end)
 local CoinsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Coins.Label.text
 local SpaceCoinsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.CyberTokens.Label.text
 local ShellsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Shells.Label.text
 local CandyCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Candy.Label.text
 local BricksCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Bricks.Label.text
 local CrystalCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Crystals.Label.text
+local DataCoinsCount = GetLocalData:GetData("Coins")
+local DataCyberTokensCount = GetLocalData:GetData("CyberTokens")
+local DataShellsCount = GetLocalData:GetData("Shells")
+local DataCandyCount = GetLocalData:GetData("Candy")
+local DataBricksCount = GetLocalData:GetData("Bricks")
+local DataCrystalsCount = GetLocalData:GetData("Crystals")
+local DataGemsCount = GetLocalData:GetData("Gems")
+
+
+-- AntiAFK
+local bb=game:service'VirtualUser'
+game:service'Players'.LocalPlayer.Idled:connect(function()
+bb:CaptureController()bb:ClickButton2(Vector2.new())
+end)
+
 
 -- Functions
+function GetEggsLeft(Value)
+    local DataCoinsCount = GetLocalData:GetData("Coins")
+    local DataCyberTokensCount = GetLocalData:GetData("CyberTokens")
+    local DataShellsCount = GetLocalData:GetData("Shells")
+    local DataCandyCount = GetLocalData:GetData("Candy")
+    local DataBricksCount = GetLocalData:GetData("Bricks")
+    local DataCrystalsCount = GetLocalData:GetData("Crystals")
+    local DataGemsCount = GetLocalData:GetData("Gems")
+    local EggsLeft
+    if _G.SettingsTable.EggType == "Basic Egg" then
+        EggsLeft = DataCoinsCount / 55
+    elseif _G.SettingsTable.EggType == "Spotted Egg" then
+        EggsLeft = DataCoinsCount / 400
+    elseif _G.SettingsTable.EggType == "Forest Egg" then
+        EggsLeft = DataCoinsCount / 1900
+    elseif _G.SettingsTable.EggType == "Exotic Egg" then
+        EggsLeft = DataCoinsCount / 12000
+    elseif _G.SettingsTable.EggType == "Arctic Egg" then
+        EggsLeft = DataCoinsCount / 55000
+    elseif _G.SettingsTable.EggType == "Ice Egg" then
+        EggsLeft = DataCointCount / 225000
+    elseif _G.SettingsTable.EggType == "Dark Egg" then
+        EggsLeft = DataCoinsCount / 1500000
+    elseif _G.SettingsTable.EggType == "Volcanic Egg" then
+        EggsLeft = DataCoinsCount / 4500000
+    elseif _G.SettingsTable.EggType == "Underworld Egg" then
+        EggsLeft = DataCoinsCount / 10000000
+    elseif _G.SettingsTable.EggType == "Crystal Egg" then
+        EggsLeft = DataCoinsCount / 45000000
+    elseif _G.SettingsTable.EggType == "Space Egg" then
+        EggsLeft = DataCyberTokensCount / 250000
+    elseif _G.SettingsTable.EggType == "Slime Egg" then
+        EggsLeft = DataCyberTokensCount / 3000000
+    elseif _G.SettingsTable.EggType == "Nebula Egg" then
+        EggsLeft = DataCyberTokensCount / 12000000
+    elseif _G.SettingsTable.EggType == "Cyborg Egg" then
+        EggsLeft = DataCyberTokensCount / 32000000
+    elseif _G.SettingsTable.EggType == "Glitched Egg" then
+        EggsLeft = DataCyberTokensCount / 55000000
+    elseif _G.SettingsTable.EggType == "Holographic Egg" then
+        EggsLeft = DataCyberTokensCount / 90000000
+    elseif _G.SettingsTable.EggType == "Coral Egg" then
+        EggsLeft = DataShellsCount / 25000
+    elseif _G.SettingsTable.EggType == "Snorkel Egg" then
+        EggsLeft = DataShellsCount / 3250000
+    elseif _G.SettingsTable.EggType == "Dark Coral Egg" then
+        EggsLeft = DataShellsCount / 120000000
+    elseif _G.SettingsTable.EggType == "Atlantis Egg" then
+        EggsLeft = DataShellsCount / 250000000
+    elseif _G.SettingsTable.EggType == "Gumdrop Egg" then
+        EggsLeft = DataCandyCount / 25000
+    elseif _G.SettingsTable.EggType == "Cake Egg" then
+        EggsLeft = DataCandyCount / 3250000
+    elseif _G.SettingsTable.EggType == "Candy Egg" then
+        EggsLeft = DataCandyCount / 65000000
+    elseif _G.SettingsTable.EggType == "Chocolate Egg" then
+        EggsLeft = DataCandyCount / 99000000
+    elseif _G.SettingsTable.EggType == "Pastry Egg" then
+        EggsLeft = DataCandyCount / 150000000
+    elseif _G.SettingsTable.EggType == "WindUp Egg" then
+        EggsLeft = DataBricksCount / 25000
+    elseif _G.SettingsTable.EggType == "Brick Egg" then
+        EggsLeft = DataBricksCount / 3250000
+    elseif _G.SettingsTable.EggType == "Toy Egg" then
+        EggsLeft = DataBricksCount / 65000000
+    elseif _G.SettingsTable.EggType == "Pixel Egg" then
+        EggsLeft = DataBricksCount / 100000000
+    elseif _G.SettingsTable.EggType == "Cartoon Egg" then
+        EggsLeft = DataBricksCount / 500000000
+    elseif _G.SettingsTable.EggType == "Mossy Egg" then
+        EggsLeft = DataCrystalsCount / 250000
+    elseif _G.SettingsTable.EggType == "Mushroom Egg" then
+        EggsLeft = DataCrystalsCount / 20000000
+    elseif _G.SettingsTable.EggType == "Element Egg" then
+        EggsLeft = DataCrystalsCount / 300000000
+    elseif _G.SettingsTable.EggType == "Mystery Egg v4" then
+        EggsLeft = DataGemsCount / 5
+    else 
+        EggsLeft = "Invalid Input or Not Updated"
+    end
+    local EggsLeft1
+    local EggsLeft2
+    if EggsLeft == "Invalid Input or Not Updated" then
+        EggsLeft1 = EggsLeft
+        EggsLeft2 = EggsLeft1
+    else
+        EggsLeft1 = math.floor(EggsLeft)
+        EggsLeft2 = EggsLeft1
+    end
+    return EggsLeft2
+end
+
+function BackupEgg()
+    spawn(function()
+        local StartEggTP = true
+        local username = game:GetService("Players").LocalPlayer.Name
+        local BackupCount1 = 0
+        BackupCount1 = game:GetService("Players")[username].leaderstats.Eggs.Value
+        while wait(300) do
+            local TotalEggsLeft = GetEggsLeft()
+            if not _G.SettingsTable.BuyEgg then break end
+            if _G.SettingsTable.EnableBackup then
+                if TotalEggsLeft < 100 then
+                    _G.SettingsTable.EggType = _G.SettingsTable.BackupEggType
+                    _G.SettingsTable.EggTP = _G.SettingsTable.BackupEggTP
+                    _G.SettingsTable.WorldOption = _G.SettingsTable.BackupWorldOption
+                    _G.PlaceHolders.BackupActive = "Yes"
+                    if StartEggTP then
+                        TweenToEgg()
+                        StartEggTP = false
+                    end
+                    if not StartEggTP then
+                        local username = game:GetService("Players").LocalPlayer.Name
+                        local BackupCount2 = 0
+                        BackupCount2 = game:GetService("Players")[username].leaderstats.Eggs.Value
+                        if BackupCount1 == BackupCount2 then
+                            TweenToEgg()
+                        else
+                            local BackupEggDifference = BackupCount2 - BackupCount1
+                            BackupCount1 = BackupCount1 + EggDifference
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
+
 function FormatCurrency(CurrencyC)
     local CC = CurrencyC:gsub("%$", ""):gsub("+", "")
     return CC
@@ -127,18 +279,24 @@ end
 
 function TweenToEgg()
     spawn(function()
+	if _G.SettingsTable.WorldOption == "Surface" then
+		local args = {
+		    [1] = "The Overworld"
+		}
+
+		game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+        wait(1)
         local args = {
             [1] = _G.SettingsTable.WorldOption
         }
         
         game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
-	if _G.SettingsTable.WorldOption == "Christmas World" then
-		wait(1)
-		local args = {
-		    [1] = "Surface"
-		}
-
-		game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+    else
+        local args = {
+            [1] = _G.SettingsTable.WorldOption
+        }
+        
+        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
 	end
         
         wait(5)
@@ -420,7 +578,7 @@ end)
 
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({
-	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.1.5",
+	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.1.6",
 	LoadingTitle = "Mining Simulator 2 GUI",
 	LoadingSubtitle = "By PetSimulatorXPlayer",
 	ConfigurationSaving = {
@@ -452,8 +610,8 @@ local CreditsSection2 = CreditsTab:CreateSection("Helper: Cor#0002")
 local CreditsSection3 = CreditsTab:CreateSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection4 = CreditsTab:CreateSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:CreateSection("--------------------------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-02-03")
-local CreditsSection7 = CreditsTab:CreateSection("Last Update: Dropdown Updates")
+local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-02-08")
+local CreditsSection7 = CreditsTab:CreateSection("Last Update: Eggs Left Counter + Backup Egg Settings")
 local CreditsSection8 = CreditsTab:CreateSection("Upcoming Update: More New Features")
 local CreditsSection9 = CreditsTab:CreateSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:CreateSection("-------------------------------------------------------------------------------------")
@@ -642,7 +800,7 @@ local AutoBuyOmegaLucky2Hours = AutoFarmTab:CreateToggle({
 local AutoHatchEggSection = EggFarmingTab:CreateSection("Auto Hatch Egg")
 local EggFarmingParagraph = EggFarmingTab:CreateParagraph({
     Title = "Current Egg Settings", 
-    Content = "Eggs Hatched: \nSecrets Hatched: \nCurrent Egg: " .. _G.SettingsTable.EggType .. "\nMulti/Quad Hatch: " .. _G.PlaceHolders.MultiHatchPlaceHolder .. "\nSkip Animation: " .. _G.PlaceHolders.SkipAnimationPlaceHolder .. "\nAuto Hatch Egg: " .. _G.PlaceHolders.AutoHatchEggPlaceHolder
+    Content = "Eggs Hatched: \nSecrets Hatched: \nCurrent Egg: " .. _G.SettingsTable.EggType .. "\nMulti/Quad Hatch: " .. _G.PlaceHolders.MultiHatchPlaceHolder .. "\nSkip Animation: " .. _G.PlaceHolders.SkipAnimationPlaceHolder .. "\nAuto Hatch Egg: " .. _G.PlaceHolders.AutoHatchEggPlaceHolder .. "\nEggs Left: NONE" 
 })
 local ChooseEggToHatchDropdown = EggFarmingTab:CreateDropdown({
 	Name = "Choose Egg: (Dropdown)",
@@ -654,7 +812,7 @@ local ChooseEggToHatchDropdown = EggFarmingTab:CreateDropdown({
 	end,
 })
 local ChooseEggToHatchText = EggFarmingTab:CreateInput({
-	Name = "Choose Egg: (Text Backup)",
+	Name = "Choose Egg: (Text)",
 	PlaceholderText = "Type The Name Of The Egg",
 	RemoveTextAfterFocusLost = false,
 	Callback = function(EggTypetxt)
@@ -682,9 +840,11 @@ local StartHatchingEgg = EggFarmingTab:CreateToggle({
         _G.SettingsTable.BuyEgg = bool
         if bool then
             HatchEgg()
+            BackupEgg()
             _G.PlaceHolders.AutoHatchEggPlaceHolder = "Activated"
         else
             _G.PlaceHolders.AutoHatchEggPlaceHolder = "Deactivated"
+            _G.PlaceHolders.BackupActive = "No"
         end
 	end,
 })
@@ -722,7 +882,7 @@ local ChooseEggToTPDropdown = EggFarmingTab:CreateDropdown({
 	end,
 })
 local ChooseEggToTPText = EggFarmingTab:CreateInput({
-	Name = "Choose Egg: (Backup Text)",
+	Name = "Choose Egg: (Text)",
 	PlaceholderText = "Type The Name Of The Egg",
 	RemoveTextAfterFocusLost = false,
 	Callback = function(Eggtptxt)
@@ -747,6 +907,52 @@ local TeleportToEgg = EggFarmingTab:CreateButton({
             _G.PlaceHolders.AutoTeleportToEggPlaceHolder = "Yes"
         else
             _G.PlaceHolders.AutoTeleportToEggPlaceHolder = "No"
+        end
+	end,
+})
+local EggBackupSection = EggFarmingTab:CreateSection("Egg Backup")
+local EggBackupParagraph = EggFarmingTab:CreateParagraph({
+    Title = "Current Egg Backup Settings", 
+    Content = "Info: Teleports to a backup egg if under 100 eggs left on main egg \nBackup Egg: " .. _G.SettingsTable.BackupEggType .. "\nBackup World: " .. _G.SettingsTable.BackupWorldOption .. "\nActivated: " .. _G.PlaceHolders.EnableBackupPlaceHolder .. "\nBackup Active: " .. _G.PlaceHolders.BackupActive
+})
+local ChooseEggToHatchDropdownBackup = EggFarmingTab:CreateDropdown({
+	Name = "Choose Backup Egg: (Dropdown)",
+	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Mystery Egg v4"},
+	CurrentOption = "Basic Egg",
+	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(EggBackupTypetxt)
+        _G.SettingsTable.BackupEggType = EggBackupTypetxt
+        _G.SettingsTable.BackupEggTP = EggBackupTypetxt
+	end,
+})
+local ChooseEggToHatchTextBackup = EggFarmingTab:CreateInput({
+	Name = "Choose Backup Egg: (Text)",
+	PlaceholderText = "Type The Name Of The Egg",
+	RemoveTextAfterFocusLost = false,
+	Callback = function(EggTypetxt)
+		_G.SettingsTable.BackupEggType = EggBackupTypetxt
+        _G.SettingsTable.BackupEggTP = EggBackupTypetxt
+	end,
+})
+local BackupWorldToTweenTo = EggFarmingTab:CreateDropdown({
+	Name = "World",
+	Options = {"Surface", "The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Mystic Forest"},
+	CurrentOption = "Surface",
+	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(WorldBackupTextOption)
+        _G.SettingsTable.BackupWorldOption = WorldBackupTextOption
+	end,
+})
+local EnableBackupEgg = EggFarmingTab:CreateToggle({
+	Name = "Enable Backup",
+	CurrentValue = false,
+	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(bool)
+        _G.SettingsTable.EnableBackup = bool
+        if bool then
+            _G.PlaceHolders.EnableBackupPlaceHolder = "Yes"
+        else
+            _G.PlaceHolders.EnableBackupPlaceHolder = "No"
         end
 	end,
 })
@@ -781,7 +987,7 @@ local IntervalsText = StatsTrackerTab:CreateInput({
 	end,
 })
 local ColorDropdown = StatsTrackerTab:CreateDropdown({
-	Name = "Embed Color (Simple)",
+	Name = "Ember Color (Simple)",
 	Options = {"Red", "Orange", "Yellow", "Green", "Blue", "Purple"},
 	CurrentOption = "Red",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -989,7 +1195,7 @@ local DiscordlinkInvite = HelpTab:CreateButton({
 local SaveSettingsSection = HelpTab:CreateSection("Settings that are saveable")
 local Settingsthataresaveable = HelpTab:CreateDropdown({
 	Name = "Settings:",
-	Options = {"Craft Option", "Auto Factory Craft", "Auto Collect Group Rewards", "Auto Buy Shop Boosts", "Choose Egg: (Hatching)", "Quad/Multi Hatch", "Start Hatching Egg", "Skip Animation", "Disable Skip Animation", "Choose Egg: (Teleport)", "Select World (Egg Teleport)", "Teleport To Egg", "Webhook", "Time Between Updates", "Embed Color", "Egg Count Setting", "Rebirths Count Setting", "Blocks Count Setting", "Activate Stats Tracker"},
+	Options = {"Craft Option", "Auto Factory Craft", "Auto Collect Group Rewards", "Auto Buy Shop Boosts", "Choose Egg: (Hatching)", "Quad/Multi Hatch", "Start Hatching Egg", "Skip Animation", "Disable Skip Animation", "Choose Egg: (Teleport)", "Select World (Egg Teleport)", "Teleport To Egg"},
 	CurrentOption = "Settings that will be saved",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function()
@@ -1024,6 +1230,7 @@ function LoadSettingsTableSettings()
             EggCountStatsTracker:Set(_G.SettingsTable.EggCount)
             RebirthCountStatsTracker:Set(_G.SettingsTable.RebirthCount)
             BlockCountStatsTracker:Set(_G.SettingsTable.BlocksCount)
+            EnableBackupEgg:Set(_G.SettingsTable.EnableBackup)
             print("Settings: Loaded")
             game.StarterGui:SetCore(
                 "SendNotification",
@@ -1076,6 +1283,16 @@ else
     _G.PlaceHolders.IntervalsPlaceHolder = _G.SettingsTable.Intervals
     _G.PlaceHolders.WebhookPlaceHolder = _G.SettingsTable.Webhookssss
     _G.PlaceHolders.ColorPlaceHolder = _G.SettingsTable.Color
+end
+
+if _G.SettingsTable.BackupEggTP == nil then
+    _G.SettingsTable.BackupEggTP = "None"
+end
+if _G.SettingsTable.BackupEggType == nil then
+    _G.SettingsTable.BackupEggType = "None"
+end
+if _G.SettingsTable.BackupWorldOption == nil then
+    _G.SettingsTable.BackupWorldOption = "None"
 end
 
 -- Settings
@@ -1132,11 +1349,11 @@ while wait() do
     AutoFactoryCraftParagraph:Set({Title = "Current Factory Settings", Content = "Craft Option: " .. _G.SettingsTable.GemType .. "\nActivated: " .. _G.PlaceHolders.AutoFactoryCraftPlaceHolder})
     AutoGroupRewardsParagraph:Set({Title = "Current Auto Collect Settings", Content = "Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder})
     AutoBuyBoostsParagraph:Set({Title = "Current Auto Buy Boosts Settings", Content = "Auto Buy Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyLucky1HourPlaceHolder .. "\nAuto Buy Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyLucky2HourPlaceHolder .. "\nAuto Buy Super Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuySuperLucky1HourPlaceHolder .. "\nAuto Buy Super Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuySuperLucky2HourPlaceHolder .. "\nAuto Buy Omega Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyOmegaLucky1HourPlaceHolder .. "\nAuto Buy Omega Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyOmegaLucky2HourPlaceHolder})
-    EggFarmingParagraph:Set({Title = "Current Egg Settings", Content = "Eggs Hatched: " .. abb(count) .. "\nSecrets Hatched: " .. abb(_G.SecretsList.TotalSecretsHatched) .. "\nCurrent Egg: " .. _G.SettingsTable.EggType .. "\nMulti/Quad Hatch: " .. _G.PlaceHolders.MultiHatchPlaceHolder .. "\nSkip Animation: " .. _G.PlaceHolders.SkipAnimationPlaceHolder .. "\nAuto Hatch Egg: " .. _G.PlaceHolders.AutoHatchEggPlaceHolder})
+    EggFarmingParagraph:Set({Title = "Current Egg Settings", Content = "Eggs Hatched: " .. abb(count) .. "\nSecrets Hatched: " .. abb(_G.SecretsList.TotalSecretsHatched) .. "\nCurrent Egg: " .. _G.SettingsTable.EggType .. "\nMulti/Quad Hatch: " .. _G.PlaceHolders.MultiHatchPlaceHolder .. "\nSkip Animation: " .. _G.PlaceHolders.SkipAnimationPlaceHolder .. "\nAuto Hatch Egg: " .. _G.PlaceHolders.AutoHatchEggPlaceHolder .. "\nEggs Left: " .. abb(GetEggsLeft())})
     AutoTeleportParagraph:Set({Title = "Current Auto Teleport Settings", Content = "Current Egg: " .. _G.SettingsTable.EggTP .. "\nCurrent World: " .. _G.SettingsTable.WorldOption .. "\nActivated: " .. _G.PlaceHolders.AutoTeleportToEggPlaceHolder })
     AutoFPSParagraph:Set({Title = "Current FPS Settings", Content = "Current FPS: " .. _G.SettingsTable.FPSSettings})
     StatsTrackerParagraph:Set({Title = "Current Stats Tracker Settings", Content = "Time Between Updates (In Seconds): " .. _G.PlaceHolders.IntervalsPlaceHolder .. "\nEmbed Color (Hex Value): " .. _G.PlaceHolders.ColorPlaceHolder .. "\nEgg Count: " .. _G.PlaceHolders.EggCountTrackerPlaceHolder .. "\nRebirth Count: " .. _G.PlaceHolders.RebirthCountTrackerPlaceHolder .. "\nBlocks Count " .. _G.PlaceHolders.BlockCountTrackerPlaceHolder .. "\nActivated: " .. _G.PlaceHolders.StatsTrackerActivationPlaceHolder})
     WebhookParagraph:Set({Title = "Webhook Data", Content = "Webhook: " .. _G.PlaceHolders.WebhookPlaceHolder .. "\nWebhook Paragraph Error (Dev Issue): " .. _G.PlaceHolders.WebhookErrorPlaceHolder})
+    EggBackupParagraph:Set({Title = "Current Egg Backup Settings", Content = "Info: Teleports to a backup egg if under 100 eggs left on main egg \nBackup Egg: " .. _G.SettingsTable.BackupEggType .. "\nBackup World: " .. _G.SettingsTable.BackupWorldOption .. "\nActivated: " .. _G.PlaceHolders.EnableBackupPlaceHolder .. "\nBackup Active: " .. _G.PlaceHolders.BackupActive})
 end
-
 Rayfield:LoadConfiguration()
