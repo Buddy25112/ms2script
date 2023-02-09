@@ -95,6 +95,16 @@ end)
 
 
 -- Functions
+function FormatNumber(CurrencyC)
+    local CC = CurrencyC:gsub(",", "")
+    return CC
+end
+
+function FormatCurrency(CurrencyC)
+    local CC = CurrencyC:gsub("%$", ""):gsub("+", "")
+    return CC
+end
+
 function GetEggsLeft(Value)
     local DataCoinsCount = GetLocalData:GetData("Coins")
     local DataCyberTokensCount = GetLocalData:GetData("CyberTokens")
@@ -187,6 +197,7 @@ function GetEggsLeft(Value)
     return EggsLeft2
 end
 
+
 function BackupEgg()
     spawn(function()
         local StartEggTP = true
@@ -223,9 +234,31 @@ function BackupEgg()
     end)
 end
 
-function FormatCurrency(CurrencyC)
-    local CC = CurrencyC:gsub("%$", ""):gsub("+", "")
-    return CC
+function PetInventoryBackup()
+    spawn(function()
+        while wait(30) do
+            if not _G.SettingsTable.BuyEgg then break end
+            if _G.SettingsTable.EnableBackup then
+                local GetLoadModule = require(game.ReplicatedStorage.LoadModule);
+                local GetPetStorage = GetLoadModule("GetPetStorage");
+                local GetAddCommas = GetLoadModule("AddCommas");
+                local GetLocalData = GetLoadModule("LocalData");
+                local GetPetsOwned = GetLocalData:GetData("Pets")
+                local PetsOwned = GetAddCommas(#GetPetsOwned)
+                local PetStorage = GetPetStorage(GetLocalData:GetData())
+                local PetStorage1 = PetStorage - 10
+                local PetsOwned1 = tonumber(FormatNumber(PetsOwned))
+                if PetsOwned1 >= PetStorage1 then
+                    _G.SettingsTable.EggType = "Basic Egg"
+                    _G.SettingsTable.EggTP = "Basic Egg"
+                    _G.SettingsTable.WorldOption = "Surface"
+                    _G.PlaceHolders.BackupActive = "Yes (Pet Inventory Backup)"
+                    TweenToEgg()
+                    break
+                end
+            end
+        end
+    end)
 end
 
 function SaveSettingsTableSettings()
@@ -578,7 +611,7 @@ end)
 
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({
-	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.1.6",
+	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.1.7",
 	LoadingTitle = "Mining Simulator 2 GUI",
 	LoadingSubtitle = "By PetSimulatorXPlayer",
 	ConfigurationSaving = {
@@ -610,8 +643,8 @@ local CreditsSection2 = CreditsTab:CreateSection("Helper: Cor#0002")
 local CreditsSection3 = CreditsTab:CreateSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection4 = CreditsTab:CreateSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:CreateSection("--------------------------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-02-08")
-local CreditsSection7 = CreditsTab:CreateSection("Last Update: Eggs Left Counter + Backup Egg Settings")
+local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-02-09")
+local CreditsSection7 = CreditsTab:CreateSection("Last Update: Added an Emergency backup egg for if pet inventory is full")
 local CreditsSection8 = CreditsTab:CreateSection("Upcoming Update: More New Features")
 local CreditsSection9 = CreditsTab:CreateSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:CreateSection("-------------------------------------------------------------------------------------")
@@ -841,6 +874,7 @@ local StartHatchingEgg = EggFarmingTab:CreateToggle({
         if bool then
             HatchEgg()
             BackupEgg()
+            PetInventoryBackup()
             _G.PlaceHolders.AutoHatchEggPlaceHolder = "Activated"
         else
             _G.PlaceHolders.AutoHatchEggPlaceHolder = "Deactivated"
