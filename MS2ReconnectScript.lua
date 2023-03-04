@@ -232,6 +232,8 @@ function GetEggsLeft(Value)
         EggsLeft = DataStarsCount / 100000000
     elseif _G.SettingsTable.EggType == "Fancy Egg" then
         EggsLeft = DataStarsCount / 300000000
+    elseif _G.SettingsTable.EggType == "Comet Egg" then
+        EggsLeft = DataStarsCount / 900000000	
     else 
         EggsLeft = "Invalid Input or Not Updated"
     end
@@ -662,7 +664,7 @@ end)
 -- Beginning of UI
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({
-	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.1.9",
+	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.2.0",
 	LoadingTitle = "Mining Simulator 2 GUI",
 	LoadingSubtitle = "By PetSimulatorXPlayer",
 	ConfigurationSaving = {
@@ -698,8 +700,8 @@ local CreditsSection2 = CreditsTab:CreateSection("Helper: Cor#0002")
 local CreditsSection3 = CreditsTab:CreateSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection4 = CreditsTab:CreateSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:CreateSection("--------------------------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-02-24")
-local CreditsSection7 = CreditsTab:CreateSection("Last Update: Added Rainbow Land Settings + Removed Valentines Settings")
+local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-03-04")
+local CreditsSection7 = CreditsTab:CreateSection("Last Update: Added Comet Egg Settings")
 local CreditsSection8 = CreditsTab:CreateSection("Upcoming Update: More New Features")
 local CreditsSection9 = CreditsTab:CreateSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:CreateSection("-------------------------------------------------------------------------------------")
@@ -943,7 +945,7 @@ local EggFarmingParagraph = EggFarmingTab:CreateParagraph({
 })
 local ChooseEggToHatchDropdown = EggFarmingTab:CreateDropdown({
 	Name = "Choose Egg: (Dropdown)",
-	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg"},
+	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg"},
 	CurrentOption = "Basic Egg",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(EggTypetxt)
@@ -1016,7 +1018,7 @@ local AutoTeleportParagraph = EggFarmingTab:CreateParagraph({
 })
 local ChooseEggToTPDropdown = EggFarmingTab:CreateDropdown({
 	Name = "Choose Egg: (Dropdown)",
-	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg"},
+	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg"},
 	CurrentOption = "Basic Egg",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Eggtptxt)
@@ -1061,7 +1063,7 @@ local EggBackupParagraph = EggFarmingTab:CreateParagraph({
 })
 local ChooseEggToHatchDropdownBackup = EggFarmingTab:CreateDropdown({
 	Name = "Choose Backup Egg: (Dropdown)",
-	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg"},
+	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg"},
 	CurrentOption = "Basic Egg",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(EggBackupTypetxt)
