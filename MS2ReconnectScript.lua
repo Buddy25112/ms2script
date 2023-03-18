@@ -400,6 +400,14 @@ function TweenToEgg()
         }
         
         game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+	wait(5)
+        local New_CFrame = game:GetService("Workspace").Eggs[_G.SettingsTable.EggTP].Price.CFrame
+        local ts = game:GetService('TweenService')
+        local char = game.Players.LocalPlayer.Character
+        local part = char.HumanoidRootPart
+        local ti = TweenInfo.new(5, Enum.EasingStyle.Linear)
+        local tp = {CFrame = New_CFrame}
+        ts:Create(part, ti, tp):Play()
     elseif _G.SettingsTable.WorldOption == "St Patricks" then
 		local args = {
 		    [1] = "St Patricks"
@@ -412,16 +420,21 @@ function TweenToEgg()
 		}
 
 		game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
-				
+	wait(5)
+        local New_CFrame = game:GetService("Workspace").Eggs[_G.SettingsTable.EggTP].Price.CFrame
+        local ts = game:GetService('TweenService')
+        local char = game.Players.LocalPlayer.Character
+        local part = char.HumanoidRootPart
+        local ti = TweenInfo.new(10, Enum.EasingStyle.Linear)
+        local tp = {CFrame = New_CFrame}
+        ts:Create(part, ti, tp):Play()			
     else
         local args = {
             [1] = _G.SettingsTable.WorldOption
         }
         
         game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
-	end
-        
-        wait(5)
+	wait(5)
         local New_CFrame = game:GetService("Workspace").Eggs[_G.SettingsTable.EggTP].Price.CFrame
         local ts = game:GetService('TweenService')
         local char = game.Players.LocalPlayer.Character
@@ -429,6 +442,7 @@ function TweenToEgg()
         local ti = TweenInfo.new(5, Enum.EasingStyle.Linear)
         local tp = {CFrame = New_CFrame}
         ts:Create(part, ti, tp):Play()
+	end
     end)
 end
 
