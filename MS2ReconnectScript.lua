@@ -67,6 +67,7 @@ _G.PlaceHolders = {
     AutoSpinWheelPlaceHolder = "Deactivated";
     AutoBuySpinsPlaceHolder = "Deactivated";
     AutoCollectSpinsPlaceHolder = "Deactivated";
+    AutoBuyEventBoostsPlaceHolder = "Deactivated";
 }
 
 -- Module Locals
@@ -399,6 +400,19 @@ function TweenToEgg()
         }
         
         game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+    elseif _G.SettingsTable.WorldOption == "Surface" then
+		local args = {
+		    [1] = "St Patricks"
+		}
+
+		game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+		wait(1)
+		local args = {
+		    [1] = "St Patricks SurfaceSell"
+		}
+
+		game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+				
     else
         local args = {
             [1] = _G.SettingsTable.WorldOption
@@ -792,7 +806,7 @@ local AutoFactoryCraft = AutoFarmTab:CreateToggle({
 local AutoGroupRewardsSection = AutoFarmTab:CreateSection("Auto Collect Features")
 local AutoGroupRewardsParagraph = AutoFarmTab:CreateParagraph({
     Title = "Current Auto Collect Settings", 
-    Content = "Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder
+    Content = "Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder .. "\nAuto Collect Event Boosts: " .. _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder
 })
 local AutoCollectGroupRewards = AutoFarmTab:CreateToggle({
 	Name = "Auto Collect Group Rewards",
@@ -860,6 +874,9 @@ local AutoCollectGroupRewards = AutoFarmTab:CreateToggle({
              BuyChristmasBoosts1()
              BuyChristmasBoosts2()
              BuyChristmasBoosts3()
+	     _G.Placeholders.AutoBuyEventBoostsPlaceHolder = "Activated"
+	else
+	     _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder = "Deactivated"
         end
  	end,
 })
@@ -1627,7 +1644,7 @@ while wait() do
     local StarsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Stars.Label.text
     CurrencyParagraph:Set({Title = "All World Currency Counts", Content = "Coins: " .. FormatCurrency(CoinsCount) .. "\nCyber Tokens: " .. FormatCurrency(SpaceCoinsCount) .. "\nShells: " .. FormatCurrency(ShellsCount) .. "\nCandy: " .. FormatCurrency(CandyCount) .. "\nBricks: " .. FormatCurrency(BricksCount) .. "\nCrystals: " .. FormatCurrency(CrystalCount) .. "\nStars: " .. FormatCurrency(StarsCount)})
     AutoFactoryCraftParagraph:Set({Title = "Current Factory Settings", Content = "Craft Option: " .. _G.SettingsTable.GemType .. "\nActivated: " .. _G.PlaceHolders.AutoFactoryCraftPlaceHolder})
-    AutoGroupRewardsParagraph:Set({Title = "Current Auto Collect Settings", Content = "Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder})
+    AutoGroupRewardsParagraph:Set({Title = "Current Auto Collect Settings", Content = "Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder  .. "\nAuto Collect Event Boosts: " .. _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder})
     AutoBuyBoostsParagraph:Set({Title = "Current Auto Buy Boosts Settings", Content = "Auto Buy Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyLucky1HourPlaceHolder .. "\nAuto Buy Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyLucky2HourPlaceHolder .. "\nAuto Buy Super Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuySuperLucky1HourPlaceHolder .. "\nAuto Buy Super Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuySuperLucky2HourPlaceHolder .. "\nAuto Buy Omega Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyOmegaLucky1HourPlaceHolder .. "\nAuto Buy Omega Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyOmegaLucky2HourPlaceHolder})
     EggFarmingParagraph:Set({Title = "Current Egg Settings", Content = "Eggs Hatched: " .. abb(count) .. "\nSecrets Hatched: " .. abb(_G.SecretsList.TotalSecretsHatched) .. "\nCurrent Egg: " .. _G.SettingsTable.EggType .. "\nMulti/Quad Hatch: " .. _G.PlaceHolders.MultiHatchPlaceHolder .. "\nSkip Animation: " .. _G.PlaceHolders.SkipAnimationPlaceHolder .. "\nAuto Hatch Egg: " .. _G.PlaceHolders.AutoHatchEggPlaceHolder .. "\nEggs Left: " .. abb(GetEggsLeft())})
     AutoTeleportParagraph:Set({Title = "Current Auto Teleport Settings", Content = "Current Egg: " .. _G.SettingsTable.EggTP .. "\nCurrent World: " .. _G.SettingsTable.WorldOption .. "\nActivated: " .. _G.PlaceHolders.AutoTeleportToEggPlaceHolder })
