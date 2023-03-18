@@ -874,7 +874,7 @@ local AutoCollectGroupRewards = AutoFarmTab:CreateToggle({
              BuyChristmasBoosts1()
              BuyChristmasBoosts2()
              BuyChristmasBoosts3()
-	     _G.Placeholders.AutoBuyEventBoostsPlaceHolder = "Activated"
+	     _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder = "Activated"
 	else
 	     _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder = "Deactivated"
         end
