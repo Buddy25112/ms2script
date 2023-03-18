@@ -443,6 +443,14 @@ function TweenToEgg()
         local tp = {CFrame = New_CFrame}
         ts:Create(part, ti, tp):Play()
 	end
+	wait(5)
+        local New_CFrame = game:GetService("Workspace").Eggs[_G.SettingsTable.EggTP].Price.CFrame
+        local ts = game:GetService('TweenService')
+        local char = game.Players.LocalPlayer.Character
+        local part = char.HumanoidRootPart
+        local ti = TweenInfo.new(5, Enum.EasingStyle.Linear)
+        local tp = {CFrame = New_CFrame}
+        ts:Create(part, ti, tp):Play()
     end)
 end
 
