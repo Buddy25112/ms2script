@@ -420,7 +420,7 @@ function TweenToEgg()
 
             game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
             wait(5)
-            local StPatricksCFrame = CFrame.new(-8829.93, 3.98154, 67.1992)
+            local StPatricksCFrame = CFrame.new(-8829.93, 10.98154, 67.1992)
             local ts = game:GetService('TweenService')
             local char = game.Players.LocalPlayer.Character
             local part = char.HumanoidRootPart
