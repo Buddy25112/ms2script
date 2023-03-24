@@ -722,7 +722,7 @@ end)
 -- Beginning of UI
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({
-	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.2.2",
+	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.2.3",
 	LoadingTitle = "Mining Simulator 2 GUI",
 	LoadingSubtitle = "By PetSimulatorXPlayer",
 	ConfigurationSaving = {
@@ -759,7 +759,7 @@ local CreditsSection3 = CreditsTab:CreateSection("Helper: wYn#0001 (Youtube Guid
 local CreditsSection4 = CreditsTab:CreateSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:CreateSection("--------------------------------------------------------------------------------------")
 local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-03-17")
-local CreditsSection7 = CreditsTab:CreateSection("Last Update: Bug Fixes")
+local CreditsSection7 = CreditsTab:CreateSection("Last Update: Spin To Win + Lucky Egg updates")
 local CreditsSection8 = CreditsTab:CreateSection("Upcoming Update: More New Features")
 local CreditsSection9 = CreditsTab:CreateSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:CreateSection("-------------------------------------------------------------------------------------")
@@ -827,7 +827,7 @@ local AutoFactoryCraft = AutoFarmTab:CreateToggle({
 local AutoGroupRewardsSection = AutoFarmTab:CreateSection("Auto Collect Features")
 local AutoGroupRewardsParagraph = AutoFarmTab:CreateParagraph({
     Title = "Current Auto Collect Settings", 
-    Content = "Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder .. "\nAuto Collect Event Boosts: " .. _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder
+    Content = "Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder .. "\nAuto Collect Event Boosts: " .. _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder .. "\nAuto Spin Wheel: " .. _G.PlaceHolders.AutoSpinWheelPlaceHolder .. "\nAuto Collect Spins: " .. _G.PlaceHolders.AutoCollectSpinsPlaceHolder .. "\nAuto Buy Spins: " .. _G.PlaceHolders.AutoBuySpinsPlaceHolder
 })
 local AutoCollectGroupRewards = AutoFarmTab:CreateToggle({
 	Name = "Auto Collect Group Rewards",
@@ -843,48 +843,48 @@ local AutoCollectGroupRewards = AutoFarmTab:CreateToggle({
         end
 	end,
 })
---local AutoCollectSpins = AutoFarmTab:CreateToggle({
---	Name = "Auto Collect Spins",
---	CurrentValue = false,
---	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
---	Callback = function(bool)
---        _G.SettingsTable.AutoCollectSpins = bool
---        if bool then
---            AutoCollectSpins()
---            _G.PlaceHolders.AutoCollectSpinsPlaceHolder = "Activated"
---        else
---            _G.PlaceHolders.AutoCollectSpinsPlaceHolder = "Deactivated"
---        end
---	end,
---})
---local AutoBuySpins = AutoFarmTab:CreateToggle({
---	Name = "Auto Buy Spins",
---	CurrentValue = false,
---	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
---	Callback = function(bool)
---       _G.SettingsTable.AutoBuySpins = bool
---        if bool then
---            AutoBuySpins()
---            _G.PlaceHolders.AutoBuySpinsPlaceHolder = "Activated"
---        else
---            _G.PlaceHolders.AutoBuySpinsPlaceHolder = "Deactivated"
---        end
---	end,
---})
---local AutoSpinWheel = AutoFarmTab:CreateToggle({
---	Name = "Auto Spin Wheel",
---	CurrentValue = false,
---	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
---	Callback = function(bool)
---        _G.SettingsTable.AutoSpinWheel = bool
---        if bool then
---            AutoSpinWheel()
---            _G.PlaceHolders.AutoSpinWheelPlaceHolder = "Activated"
---        else
---            _G.PlaceHolders.AutoSpinWheelPlaceHolder = "Deactivated"
---        end
---	end,
---})
+local AutoCollectSpins = AutoFarmTab:CreateToggle({
+	Name = "Auto Collect Spins",
+	CurrentValue = false,
+	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(bool)
+        _G.SettingsTable.AutoCollectSpins = bool
+        if bool then
+            AutoCollectSpins()
+            _G.PlaceHolders.AutoCollectSpinsPlaceHolder = "Activated"
+        else
+            _G.PlaceHolders.AutoCollectSpinsPlaceHolder = "Deactivated"
+        end
+	end,
+})
+local AutoBuySpins = AutoFarmTab:CreateToggle({
+	Name = "Auto Buy Spins",
+	CurrentValue = false,
+	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(bool)
+       _G.SettingsTable.AutoBuySpins = bool
+        if bool then
+            AutoBuySpins()
+            _G.PlaceHolders.AutoBuySpinsPlaceHolder = "Activated"
+        else
+            _G.PlaceHolders.AutoBuySpinsPlaceHolder = "Deactivated"
+        end
+	end,
+})
+local AutoSpinWheel = AutoFarmTab:CreateToggle({
+	Name = "Auto Spin Wheel",
+	CurrentValue = false,
+	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(bool)
+        _G.SettingsTable.AutoSpinWheel = bool
+        if bool then
+            AutoSpinWheel()
+            _G.PlaceHolders.AutoSpinWheelPlaceHolder = "Activated"
+        else
+            _G.PlaceHolders.AutoSpinWheelPlaceHolder = "Deactivated"
+        end
+	end,
+})
  local AutoBuyChristmasBoosts = AutoFarmTab:CreateToggle({
  	Name = "Auto Buy Event Boosts",
  	CurrentValue = false,
@@ -1006,7 +1006,7 @@ local EggFarmingParagraph = EggFarmingTab:CreateParagraph({
 })
 local ChooseEggToHatchDropdown = EggFarmingTab:CreateDropdown({
 	Name = "Choose Egg: (Dropdown)",
-	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Clover Egg", "Brilliant Egg", "Fortune Egg", "Jackpot Egg"},
+	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Clover Egg", "Brilliant Egg", "Fortune Egg", "Jackpot Egg", "Lucky Egg"},
 	CurrentOption = "Basic Egg",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(EggTypetxt)
@@ -1079,7 +1079,7 @@ local AutoTeleportParagraph = EggFarmingTab:CreateParagraph({
 })
 local ChooseEggToTPDropdown = EggFarmingTab:CreateDropdown({
 	Name = "Choose Egg: (Dropdown)",
-	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Clover Egg", "Brilliant Egg", "Fortune Egg", "Jackpot Egg"},
+	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Clover Egg", "Brilliant Egg", "Fortune Egg", "Jackpot Egg", "Lucky Egg"},
 	CurrentOption = "Basic Egg",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Eggtptxt)
@@ -1124,7 +1124,7 @@ local EggBackupParagraph = EggFarmingTab:CreateParagraph({
 })
 local ChooseEggToHatchDropdownBackup = EggFarmingTab:CreateDropdown({
 	Name = "Choose Backup Egg: (Dropdown)",
-	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Clover Egg", "Brilliant Egg", "Fortune Egg", "Jackpot Egg"},
+	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Clover Egg", "Brilliant Egg", "Fortune Egg", "Jackpot Egg", "Lucky Egg"},
 	CurrentOption = "Basic Egg",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(EggBackupTypetxt)
@@ -1665,7 +1665,7 @@ while wait() do
     local StarsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Stars.Label.text
     CurrencyParagraph:Set({Title = "All World Currency Counts", Content = "Coins: " .. FormatCurrency(CoinsCount) .. "\nCyber Tokens: " .. FormatCurrency(SpaceCoinsCount) .. "\nShells: " .. FormatCurrency(ShellsCount) .. "\nCandy: " .. FormatCurrency(CandyCount) .. "\nBricks: " .. FormatCurrency(BricksCount) .. "\nCrystals: " .. FormatCurrency(CrystalCount) .. "\nStars: " .. FormatCurrency(StarsCount)})
     AutoFactoryCraftParagraph:Set({Title = "Current Factory Settings", Content = "Craft Option: " .. _G.SettingsTable.GemType .. "\nActivated: " .. _G.PlaceHolders.AutoFactoryCraftPlaceHolder})
-    AutoGroupRewardsParagraph:Set({Title = "Current Auto Collect Settings", Content = "Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder  .. "\nAuto Collect Event Boosts: " .. _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder})
+    AutoGroupRewardsParagraph:Set({Title = "Current Auto Collect Settings", Content = "Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder .. "\nAuto Collect Event Boosts: " .. _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder .. "\nAuto Spin Wheel: " .. _G.PlaceHolders.AutoSpinWheelPlaceHolder .. "\nAuto Collect Spins: " .. _G.PlaceHolders.AutoCollectSpinsPlaceHolder .. "\nAuto Buy Spins: " .. _G.PlaceHolders.AutoBuySpinsPlaceHolder})
     AutoBuyBoostsParagraph:Set({Title = "Current Auto Buy Boosts Settings", Content = "Auto Buy Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyLucky1HourPlaceHolder .. "\nAuto Buy Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyLucky2HourPlaceHolder .. "\nAuto Buy Super Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuySuperLucky1HourPlaceHolder .. "\nAuto Buy Super Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuySuperLucky2HourPlaceHolder .. "\nAuto Buy Omega Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyOmegaLucky1HourPlaceHolder .. "\nAuto Buy Omega Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyOmegaLucky2HourPlaceHolder})
     EggFarmingParagraph:Set({Title = "Current Egg Settings", Content = "Eggs Hatched: " .. abb(count) .. "\nSecrets Hatched: " .. abb(_G.SecretsList.TotalSecretsHatched) .. "\nCurrent Egg: " .. _G.SettingsTable.EggType .. "\nMulti/Quad Hatch: " .. _G.PlaceHolders.MultiHatchPlaceHolder .. "\nSkip Animation: " .. _G.PlaceHolders.SkipAnimationPlaceHolder .. "\nAuto Hatch Egg: " .. _G.PlaceHolders.AutoHatchEggPlaceHolder .. "\nEggs Left: " .. abb(GetEggsLeft())})
     AutoTeleportParagraph:Set({Title = "Current Auto Teleport Settings", Content = "Current Egg: " .. _G.SettingsTable.EggTP .. "\nCurrent World: " .. _G.SettingsTable.WorldOption .. "\nActivated: " .. _G.PlaceHolders.AutoTeleportToEggPlaceHolder })
