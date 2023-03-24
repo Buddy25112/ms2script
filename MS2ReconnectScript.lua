@@ -251,6 +251,8 @@ function GetEggsLeft(Value)
         EggsLeft = DataSilverCount / 300000000
     elseif _G.SettingsTable.EggType == "Jackpot Egg" then
         EggsLeft = DataSilverCount / 900000000
+    elseif _G.SettingsTable.EggType == "Lucky Egg" then
+        EggsLeft = DataSilverCount / 1500000000
     else 
         EggsLeft = "Invalid Input or Not Updated"
     end
