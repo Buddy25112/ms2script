@@ -37,6 +37,8 @@ _G.SettingsTable = {
     AutoBuySpins = false;
     AutoCollectSpins = false;
     BuyEventBoosts = false;
+    SmartEnableBoostsSlow = false;
+    SmartEnableBoostsFast = false;
 }
 _G.SecretsList = {
     TotalSecretsHatched = 0;
@@ -83,6 +85,7 @@ local DataGemsCount = GetLocalData:GetData("Gems")
 local DataStarsCount = GetLocalData:GetData("Stars")
 local DataSilverCount = GetLocalData:GetData("Silver")
 
+
 -- Locals
 local username = game:GetService("Players").LocalPlayer.Name
 local SettingsTableName = username .. "_Settings_MS2.txt"
@@ -96,7 +99,20 @@ local CrystalCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.
 local StarsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Stars.Label.text
 local Headers = {["content-type"] = "application/json"}
 local Chat = game:GetService("Players").LocalPlayer.PlayerGui.Chat.Frame.ChatChannelParentFrame["Frame_MessageLogDisplay"].Scroller
-local BoostAmount
+local OmegaBoostsActivated = 0
+local CurrentActivatedSuperLucky = 0
+local CurrentActivatedLucky = 0
+
+-- Boosts
+for i,v in pairs(GetLocalData:GetData("ActiveBoosts")) do
+    if v[1] == "Omega Lucky" then
+        OmegaBoostsActivated = OmegaBoostsActivated + v[2]
+    elseif v[1] == "Super Lucky" then
+        CurrentActivatedSuperLucky = CurrentActivatedSuperLucky + v[2]
+    elseif v[1] == "Lucky" then
+        CurrentActivatedLucky = CurrentActivatedLucky + v[2]
+    end
+end
 
 -- AntiAFK
 local bb=game:service'VirtualUser'
@@ -131,6 +147,18 @@ function abb(Value)
         end
     end
     return Formatted
+end
+
+function FormatBoostNumber(Boost)
+    if string.find(Boost, "h") then
+        local CC = Boost:gsub("h",  "")
+        local CC1 = tonumber(CC) * 3600
+        return CC1
+    elseif string.find(Boost, "m") then
+        local CC = Boost:gsub("m",  "")
+        local CC1 = tonumber(CC) * 60
+        return CC1
+    end
 end
 
 function AutoBuySpins()
@@ -329,6 +357,455 @@ function PetInventoryBackup()
                     TweenToEgg()
                     break
                 end
+            end
+        end
+    end)
+end
+
+-- Thanks to Tense_Master for making this!!
+function EnableSuperLuckyBoostsFast()
+    local ActivatedSuperLuckyBoosts = 0
+    for i,v in pairs(GetLocalData:GetData("BoostInventory")) do
+        if v[1] == "Super Lucky" and OmegaBoostsActivated > ActivatedSuperLuckyBoosts + CurrentActivatedSuperLucky then
+            ActivatedSuperLuckyBoosts = ActivatedSuperLuckyBoosts + v[2]
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer("Super Lucky", v[2])
+        end
+    end
+end
+function EnableLuckyBoostsFast()
+    local ActivatedLuckyBoosts = 0
+    for i,v in pairs(GetLocalData:GetData("BoostInventory")) do
+        if v[1] == "Lucky" and OmegaBoostsActivated > ActivatedLuckyBoosts + CurrentActivatedLucky then
+            ActivatedLuckyBoosts = ActivatedLuckyBoosts + v[2]
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer("Lucky", v[2])
+        end
+    end
+    EnableSuperLuckyBoostsFast()
+end
+function EnableOmegaLuckyBoostsFast()
+    for i,v in pairs(GetLocalData:GetData("BoostInventory")) do
+        if v[1] == "Omega Lucky" then
+            OmegaBoostsActivated = OmegaBoostsActivated + v[2]
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer("Omega Lucky", v[2])
+        end
+    end
+    EnableLuckyBoostsFast()
+end
+----------------------------------------
+
+function EnableLuckyBoosts()
+    spawn(function()
+        local LuckyCount = 0
+        local BackupLuckyCount = 0
+        while wait() do
+            if not _G.SettingsTable.SmartEnableBoostsSlow then break end
+            if game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Visible == false then
+                game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text = "0m"
+            end
+            local SuperOmegaPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Omega Lucky"].Frame.Title.Text)
+            if LuckyCount == 0 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 43200}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 1
+                end
+            elseif LuckyCount == 1 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 28800}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 2
+                end
+            elseif LuckyCount == 2 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 21600}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 3
+                end
+            elseif LuckyCount == 3 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 14400}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 4
+                end
+            elseif LuckyCount == 4 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 7200}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 5
+                end
+            elseif LuckyCount == 5 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 5400}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 6
+                end
+            elseif LuckyCount == 6 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 3600}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 7
+                end
+            elseif LuckyCount == 7 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 2700}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 8
+                end
+            elseif LuckyCount == 8 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 1800}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 9
+                end
+            elseif LuckyCount == 9 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 1200}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 10
+                end
+            elseif LuckyCount == 10 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 900}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 11
+                end
+            elseif LuckyCount == 11 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 600}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 12
+                end
+            elseif LuckyCount == 12 then
+                local INLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Lucky",
+                    [2] = 300}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+                if INLuckyPoint2 == INLuckyPoint1 then
+                    LuckyCount = 13
+                end
+            elseif LuckyCount == 13 then
+                    print("ERROR! All Super Lucky Boosts Activated OR Lag Issues. Restarting!")
+                    LuckyCount = 0
+                    BackupLuckyCount = BackupLuckyCount + 1
+                if BackupLuckyCount == 2 then
+                    print("ERRORS! Unsuccessfull!")
+                    break
+                end
+            end
+            local LuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Lucky"].Frame.Title.Text)
+            print("Success!")
+            if LuckyPoint1 > SuperOmegaPoint2 or LuckyPoint1 == SuperOmegaPoint2 then
+                print("Successfully Enabled Boosts!")
+                break
+            end
+        end
+    end)
+end
+
+function EnableSuperLuckyBoosts()
+    spawn(function()
+        local SuperLuckyCount = 0
+        local BackupSuperLuckyCount = 0
+        while wait() do
+            if not _G.SettingsTable.SmartEnableBoostsSlow then break end
+            if game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Visible == false then
+                game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text = "0m"
+            end
+            local SuperOmegaPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Omega Lucky"].Frame.Title.Text)
+            if SuperLuckyCount == 0 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 43200}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 1
+                end
+            elseif SuperLuckyCount == 1 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 28800}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 2
+                end
+            elseif SuperLuckyCount == 2 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 21600}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 3
+                end
+            elseif SuperLuckyCount == 3 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 14400}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 4
+                end
+            elseif SuperLuckyCount == 4 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 7200}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 5
+                end
+            elseif SuperLuckyCount == 5 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 5400}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 6
+                end
+            elseif SuperLuckyCount == 6 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 3600}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 7
+                end
+            elseif SuperLuckyCount == 7 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 2700}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 8
+                end
+            elseif SuperLuckyCount == 8 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 1800}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 9
+                end
+            elseif SuperLuckyCount == 9 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 1200}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 10
+                end
+            elseif SuperLuckyCount == 10 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 900}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 11
+                end
+            elseif SuperLuckyCount == 11 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 600}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 12
+                end
+            elseif SuperLuckyCount == 12 then
+                local INSuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                local args = {
+                    [1] = "Super Lucky",
+                    [2] = 300}
+                game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+                wait(2)
+                local INSuperLuckyPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+                if INSuperLuckyPoint2 == INSuperLuckyPoint1 then
+                    SuperLuckyCount = 13
+                end
+            elseif SuperLuckyCount == 13 then
+                    print("ERROR! All Super Lucky Boosts Activated OR Lag Issues. Restarting!")
+                    SuperLuckyCount = 0
+                    BackupSuperLuckyCount = BackupSuperLuckyCount + 1
+                if BackupSuperLuckyCount == 2 then
+                    print("ERRORS! Moving to Lucky Boosts")
+                    EnableLuckyBoosts()
+                    break
+                end
+            end
+            local SuperLuckyPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Super Lucky"].Frame.Title.Text)
+            print("Success!")
+            if SuperLuckyPoint1 > SuperOmegaPoint1 or SuperLuckyPoint1 == SuperOmegaPoint1 then
+                print("All Super Lucky Boosts Activated!")
+                EnableLuckyBoosts()
+                break
+            end
+        end
+    end)
+end
+
+function EnableOmegaLuckyBoosts()
+    spawn(function()
+        while wait() do
+            if not _G.SettingsTable.SmartEnableBoostsSlow then break end
+            if game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Omega Lucky"].Visible == false then
+                game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Omega Lucky"].Frame.Title.Text = "0m"
+            end
+            local OmegaPoint1 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Omega Lucky"].Frame.Title.Text)
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 300}
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 600} 
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 900}      
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 1200}       
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 1800}   
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 2700}      
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 3600}
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 5400}
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 7200}
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 14400}
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 21600}
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 28800}
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 43200}
+            game:GetService("ReplicatedStorage").Events.UseBoost:FireServer(unpack(args))
+            wait(2)
+            local OmegaPoint2 = FormatBoostNumber(game:GetService("Players")[username].PlayerGui.ScreenGui.HUD.Boosts["Omega Lucky"].Frame.Title.Text)
+            print("Success!")
+            if OmegaPoint2 == OmegaPoint1 then
+                EnableSuperLuckyBoosts()
+                print("All Omega Lucky Boosts Activated!")
+                break
             end
         end
     end)
@@ -726,7 +1203,7 @@ end)
 -- Beginning of UI
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({
-	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.2.5",
+	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.2.6",
 	LoadingTitle = "Mining Simulator 2 GUI",
 	LoadingSubtitle = "By PetSimulatorXPlayer",
 	ConfigurationSaving = {
@@ -762,9 +1239,9 @@ local CreditsSection2 = CreditsTab:CreateSection("Helper: Cor#0002")
 local CreditsSection3 = CreditsTab:CreateSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection4 = CreditsTab:CreateSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:CreateSection("--------------------------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-03-31")
-local CreditsSection7 = CreditsTab:CreateSection("Last Update: Added Unlucky Egg to the Dropdowns")
-local CreditsSection8 = CreditsTab:CreateSection("Upcoming Update: More New Features")
+local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-04-04")
+local CreditsSection7 = CreditsTab:CreateSection("Last Update: 'Smart Auto Enable Boosts' has been added!")
+local CreditsSection8 = CreditsTab:CreateSection("Upcoming Update: Pet Hatcher")
 local CreditsSection9 = CreditsTab:CreateSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:CreateSection("-------------------------------------------------------------------------------------")
 
@@ -998,6 +1475,38 @@ local AutoBuyOmegaLucky2Hours = AutoFarmTab:CreateToggle({
         end
 	end,
 })
+
+local AutoEnableBoostsSection = AutoFarmTab:CreateSection("Auto Enable Boosts")
+local AutoEnableBoostsParagraph = AutoFarmTab:CreateParagraph({
+    Title = "⚠️ WARNING ⚠️", 
+    Content = "USING THESE FEATURES CAN RESULT IN ALL OF YOUR BOOSTS BEING USED UP! ALTHOUGH ITS UNLIKELY, ITS STILL POSSIBLE.\n⚠️USE AT YOUR OWN RISK!⚠️"
+})
+local AutoEnableSmartBoostsSlow = AutoFarmTab:CreateToggle({
+	Name = "Smart Auto Enable Boosts (Slow)",
+	CurrentValue = false,
+	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(bool)
+        _G.SettingsTable.SmartEnableBoostsSlow = bool
+        if bool then
+            EnableOmegaLuckyBoosts()
+        end
+	end,
+})
+
+local AutoEnableSmartBoostsSlow = AutoFarmTab:CreateToggle({
+	Name = "Smart Auto Enable Boosts (Fast)",
+	CurrentValue = false,
+	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(bool)
+        _G.SettingsTable.EnableSmartBoostsFast = bool
+        if bool then
+            EnableOmegaLuckyBoostsFast()
+        end
+	end,
+})
+
+
+
 
 
 
