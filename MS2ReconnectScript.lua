@@ -1238,7 +1238,6 @@ function GetTimeLeft(Value)
                 end
                 TimeNumber = tostring(TimeNumber2)
             end
-            print(TimeNumber)
             return TimeNumber
         end
 end
