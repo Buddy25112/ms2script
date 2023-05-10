@@ -75,33 +75,38 @@ _G.PlaceHolders = {
 -- Module Locals
 local LoadModule = require(game.ReplicatedStorage.LoadModule);
 local GetLocalData = LoadModule("LocalData");
-local DataCoinsCount = GetLocalData:GetData("Coins")
-local DataCyberTokensCount = GetLocalData:GetData("CyberTokens")
-local DataShellsCount = GetLocalData:GetData("Shells")
-local DataCandyCount = GetLocalData:GetData("Candy")
-local DataBricksCount = GetLocalData:GetData("Bricks")
-local DataCrystalsCount = GetLocalData:GetData("Crystals")
-local DataGemsCount = GetLocalData:GetData("Gems")
-local DataStarsCount = GetLocalData:GetData("Stars")
-local DataFlowerCount = GetLocalData:GetData("Flowers")
-
 
 -- Locals
 local username = game:GetService("Players").LocalPlayer.Name
 local SettingsTableName = username .. "_Settings_MS2.txt"
 local SecretsListName = username .. "_SecretsList_MS2.txt"
-local CoinsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Coins.Label.text
-local SpaceCoinsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.CyberTokens.Label.text
-local ShellsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Shells.Label.text
-local CandyCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Candy.Label.text
-local BricksCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Bricks.Label.text
-local CrystalCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Crystals.Label.text
-local StarsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Stars.Label.text
-local Headers = {["content-type"] = "application/json"}
 local Chat = game:GetService("Players").LocalPlayer.PlayerGui.Chat.Frame.ChatChannelParentFrame["Frame_MessageLogDisplay"].Scroller
 local OmegaBoostsActivated = 0
 local CurrentActivatedSuperLucky = 0
 local CurrentActivatedLucky = 0
+local EggsHatchedPerHour = 0
+local EggsHatchedPerDay = 0
+
+-- Update Locals
+local FactorySettings = {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5", "Bricks 1", "Bricks 2", "Bricks 3", "Bricks 4", "Bricks 5", "Crystals 1", "Crystals 2", "Crystals 3", "Crystals 4", "Crystals 5", "Stars 1", "Stars 2", "Stars 3", "Stars 4", "Stars 5"}
+local EggSettings = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Delicate Egg", "Yolk Egg", "Bunny Egg", "Critter Egg", "Floral Egg", "Guardian Egg", "Magnificent Egg"}
+local WorldSettings = {"Surface", "The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Mystic Forest", "Rainbow Land", "Spring World"}
+local LayerSettings = {"Hidden Treasure", "Frozen Depths", "Gloomy Basin", "Molten Core", "The Underworld", "Crystal Cavern", "Cyber Sewers", "Cosmic Abyss", "Cyber Core", "Glitched Chasm", "Rocky Depths", "Sea Shell Shallows", "City of Gold", "Dark Coral Depths", "Chocolate Caves", "Gummy Depths", "Cupcake Cavern", "Donut Depths", "Blocky Basin", "Bear Depths", "Building Depths", "Pixel Park", "Glowing Depths", "Neon Rocks", "Mystic Cavern", "Magenta Forest", "Rainbow Depths", "Violet Forest", "Spring World Surface"}
+local TpWorldSettings = {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "GemGenie", "Mystic Forest", "Rainbow Land", "Spring World"}
+
+-- Spawn Functions
+spawn(function()
+    local plr = game:GetService("Players").LocalPlayer.Name
+    local StartCount = game:GetService("Players")[plr].leaderstats.Eggs.Value
+    while wait(30) do
+        local EndCount = game:GetService("Players")[plr].leaderstats.Eggs.Value
+        local EggsHatchedPer30Seconds = EndCount - StartCount 
+        StartCount = StartCount + EggsHatchedPer30Seconds
+        local EggsHatchedPerMinute = math.floor(EggsHatchedPer30Seconds) * 2
+        EggsHatchedPerHour = EggsHatchedPerMinute * 60
+        EggsHatchedPerDay = EggsHatchedPerHour * 24
+    end
+end)
 
 -- Boosts
 for i,v in pairs(GetLocalData:GetData("ActiveBoosts")) do
@@ -120,72 +125,7 @@ game:service'Players'.LocalPlayer.Idled:connect(function()
 bb:CaptureController()bb:ClickButton2(Vector2.new())
 end)
 
-
--- Functions
-function FormatNumber(CurrencyC)
-    local CC = CurrencyC:gsub(",", "")
-    return CC
-end
-
-function FormatCurrency(CurrencyC)
-    local CC = CurrencyC:gsub("%$", ""):gsub("+", "")
-    return CC
-end
-
-function FormatBoostNumber(CurrencyC)
-    local CC = CurrencyC:gsub("h", "")
-    return CC
-end
-
-function abb(Value)
-    local Number
-    local Formatted = Value
-    while true do
-        Formatted, Number = string.gsub(Formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
-        if (Number == 0) then
-            break
-        end
-    end
-    return Formatted
-end
-
-function FormatBoostNumber(Boost)
-    if string.find(Boost, "h") then
-        local CC = Boost:gsub("h",  "")
-        local CC1 = tonumber(CC) * 3600
-        return CC1
-    elseif string.find(Boost, "m") then
-        local CC = Boost:gsub("m",  "")
-        local CC1 = tonumber(CC) * 60
-        return CC1
-    end
-end
-
-function AutoBuySpins()
-    spawn(function()
-        while wait() do 
-            if not _G.SettingsTable.AutoBuySpins then break end
-            game:GetService("ReplicatedStorage").Events.BuySpinToWin:FireServer()
-        end
-    end)
-end
-function AutoCollectSpins()
-    spawn(function()
-        while wait() do 
-            if not _G.SettingsTable.AutoCollectSpins then break end
-            game:GetService("ReplicatedStorage").Events.ClaimSpinToWin:FireServer()
-        end
-    end)
-end
-function AutoSpinWheel()
-    spawn(function()
-        while wait() do 
-            if not _G.SettingsTable.AutoSpinWheel then break end
-            game:GetService("ReplicatedStorage").Events.PlaySpinToWin:FireServer()
-        end
-    end)
-end
-
+-- Update Functions
 function GetEggsLeft(Value)
     local DataCoinsCount = GetLocalData:GetData("Coins")
     local DataCyberTokensCount = GetLocalData:GetData("CyberTokens")
@@ -301,69 +241,172 @@ function GetEggsLeft(Value)
 end
 
 
-function BackupEgg()
-    spawn(function()
-        local StartEggTP = true
-        local username = game:GetService("Players").LocalPlayer.Name
-        local BackupCount1 = 0
-        BackupCount1 = game:GetService("Players")[username].leaderstats.Eggs.Value
-        while wait(300) do
-            local TotalEggsLeft = GetEggsLeft()
-            if not _G.SettingsTable.BuyEgg then break end
-            if _G.SettingsTable.EnableBackup then
-                if TotalEggsLeft < 100 then
-                    _G.SettingsTable.EggType = _G.SettingsTable.BackupEggType
-                    _G.SettingsTable.EggTP = _G.SettingsTable.BackupEggTP
-                    _G.SettingsTable.WorldOption = _G.SettingsTable.BackupWorldOption
-                    _G.PlaceHolders.BackupActive = "Yes"
-                    if StartEggTP then
-                        TweenToEgg()
-                        StartEggTP = false
-                    end
-                    if not StartEggTP then
-                        local username = game:GetService("Players").LocalPlayer.Name
-                        local BackupCount2 = 0
-                        BackupCount2 = game:GetService("Players")[username].leaderstats.Eggs.Value
-                        if BackupCount1 == BackupCount2 then
-                            TweenToEgg()
-                        else
-                            local BackupEggDifference = BackupCount2 - BackupCount1
-                            BackupCount1 = BackupCount1 + BackupEggDifference
-                        end
-                    end
-                end
-            end
+-- GSub Functions
+function FormatNumber(CurrencyC)
+    local CC = CurrencyC:gsub(",", "")
+    return CC
+end
+function FormatCurrency(CurrencyC)
+    local CC = CurrencyC:gsub("%$", ""):gsub("+", "")
+    return CC
+end
+function FormatBoostNumber(CurrencyC)
+    local CC = CurrencyC:gsub("h", "")
+    return CC
+end
+function abb(Value)
+    local Number
+    local Formatted = Value
+    while true do
+        Formatted, Number = string.gsub(Formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+        if (Number == 0) then
+            break
         end
-    end)
+    end
+    return Formatted
+end
+function FormatBoostNumber(Boost)
+    if string.find(Boost, "h") then
+        local CC = Boost:gsub("h",  "")
+        local CC1 = tonumber(CC) * 3600
+        return CC1
+    elseif string.find(Boost, "m") then
+        local CC = Boost:gsub("m",  "")
+        local CC1 = tonumber(CC) * 60
+        return CC1
+    end
 end
 
-function PetInventoryBackup()
+
+
+-- Autofarm Functions
+function AutoFactoryCraft()
     spawn(function()
         while wait(30) do
-            if not _G.SettingsTable.BuyEgg then break end
-            if _G.SettingsTable.EnableBackup then
-                local GetLoadModule = require(game.ReplicatedStorage.LoadModule);
-                local GetPetStorage = GetLoadModule("GetPetStorage");
-                local GetAddCommas = GetLoadModule("AddCommas");
-                local GetLocalData = GetLoadModule("LocalData");
-                local GetPetsOwned = GetLocalData:GetData("Pets")
-                local PetsOwned = GetAddCommas(#GetPetsOwned)
-                local PetStorage = GetPetStorage(GetLocalData:GetData())
-                local PetStorage1 = PetStorage - 10
-                local PetsOwned1 = tonumber(FormatNumber(PetsOwned))
-                if PetsOwned1 >= PetStorage1 then
-                    _G.SettingsTable.EggType = "Basic Egg"
-                    _G.SettingsTable.EggTP = "Basic Egg"
-                    _G.SettingsTable.WorldOption = "Surface"
-                    _G.PlaceHolders.BackupActive = "Yes (Pet Inventory Backup)"
-                    TweenToEgg()
-                    break
-                end
-            end
+            if not _G.SettingsTable.AutoCraft then break end
+            local args = {
+                [1] = 1
+            }
+            
+            game:GetService("ReplicatedStorage").Events.ClaimFactoryCraft:FireServer(unpack(args))
+            local args = {
+                [1] = 2
+            }
+            
+            game:GetService("ReplicatedStorage").Events.ClaimFactoryCraft:FireServer(unpack(args))
+            local args = {
+                [1] = 3
+            }
+            
+            game:GetService("ReplicatedStorage").Events.ClaimFactoryCraft:FireServer(unpack(args))
+            wait(1)
+            local args = {
+                [1] = _G.SettingsTable.GemType,
+                [2] = 1
+            }
+            
+            game:GetService("ReplicatedStorage").Events.StartFactoryCraft:FireServer(unpack(args))
+            local args = {
+                [1] = _G.SettingsTable.GemType,
+                [2] = 2
+            }
+            
+            game:GetService("ReplicatedStorage").Events.StartFactoryCraft:FireServer(unpack(args))
+            local args = {
+                [1] = _G.SettingsTable.GemType,
+                [2] = 3
+            }
+            
+            game:GetService("ReplicatedStorage").Events.StartFactoryCraft:FireServer(unpack(args))
         end
     end)
 end
+function ClaimGroupBenefits()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.ClaimGroupBenefits then break end
+            game:GetService("ReplicatedStorage").Functions.ClaimGroupBenefits:InvokeServer()
+        end
+    end)
+end
+function BuyLuckyBoost1Hour()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.BuyLucky1Hour then break end
+            local args = {
+                [1] = "Lucky",
+                [2] = 1
+            }
 
+            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
+        end
+    end)
+end
+function BuyLuckyBoost2Hour()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.BuyLucky2Hour then break end
+            local args = {
+                [1] = "Lucky",
+                [2] = 2
+            }
+
+            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
+        end
+    end)
+end
+function BuySuperLuckyBoost1Hour()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.BuySuperLucky1Hour then break end
+            local args = {
+                [1] = "Super Lucky",
+                [2] = 1
+            }
+
+            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
+        end
+    end)
+end
+function BuySuperLuckyBoost2Hour()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.BuySuperLucky2Hour then break end
+            local args = {
+                [1] = "Super Lucky",
+                [2] = 2
+            }
+
+            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
+        end
+    end)
+end
+function BuyOmegaLuckyBoost1Hour()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.BuyOmegaLucky1Hour then break end
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 1
+            }
+
+            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
+        end
+    end)
+end
+function BuyOmegaLuckyBoost2Hour()
+    spawn(function()
+        while wait(5) do
+            if not _G.SettingsTable.BuyOmegaLucky2Hour then break end
+            local args = {
+                [1] = "Omega Lucky",
+                [2] = 2
+            }
+
+            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
+        end
+    end)
+end
 -- Thanks to Tense_Master for making this!!
 function EnableSuperLuckyBoostsFast()
     local ActivatedSuperLuckyBoosts = 0
@@ -394,7 +437,6 @@ function EnableOmegaLuckyBoostsFast()
     EnableLuckyBoostsFast()
 end
 ----------------------------------------
-
 function EnableLuckyBoosts()
     spawn(function()
         local LuckyCount = 0
@@ -566,7 +608,6 @@ function EnableLuckyBoosts()
         end
     end)
 end
-
 function EnableSuperLuckyBoosts()
     spawn(function()
         local SuperLuckyCount = 0
@@ -740,7 +781,6 @@ function EnableSuperLuckyBoosts()
         end
     end)
 end
-
 function EnableOmegaLuckyBoosts()
     spawn(function()
         while wait() do
@@ -813,45 +853,9 @@ function EnableOmegaLuckyBoosts()
     end)
 end
 
-function SaveSettingsTableSettings()
-    local json
-    local HttpService = game:GetService("HttpService")
-    if (writefile) then
-        json = HttpService:JSONEncode(_G.SettingsTable)
-        writefile(SettingsTableName, json)
-        game.StarterGui:SetCore(
-               	"SendNotification",
-            {
-                Title = "SUCCESS!",
-                Text = "Settings Have Been Saved",
-                Duration = 5
-            }
-        )
-    end
-end
 
-function SaveSettingsSecretsList()
-    local json
-    local HttpService = game:GetService("HttpService")
-    if (writefile) then
-        json = HttpService:JSONEncode(_G.SecretsList)
-        writefile(SecretsListName, json)
-    end
-end
 
-function LoadSettingsSecretsList()
-    local HttpService = game:GetService("HttpService")
-    if (readfile and isfile and isfile(SecretsListName)) then
-        _G.SecretsList = HttpService:JSONDecode(readfile(SecretsListName))
-    end
-end
-
-function EnableLuckyBoost()
-    spawn(function()
-        --game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Boosts.Lucky.Frame.Title.Text
-    end)
-end
-
+-- Egg Hatching Functions
 function HatchEgg()
     spawn(function()
         while wait() do 
@@ -867,7 +871,11 @@ function HatchEgg()
         end
     end)
 end
-
+function SkipAnimation()
+    spawn(function()
+        game.ReplicatedStorage.ClientModules.Other.OpenEgg.HatchGui:Destroy()
+    end)
+end
 function TweenToEgg()
     spawn(function()
         if _G.SettingsTable.WorldOption == "Surface" then
@@ -929,112 +937,150 @@ function TweenToEgg()
         end
     end)
 end
+function BackupEgg()
+    spawn(function()
+        local StartEggTP = true
+        local username = game:GetService("Players").LocalPlayer.Name
+        local BackupCount1 = 0
+        BackupCount1 = game:GetService("Players")[username].leaderstats.Eggs.Value
+        while wait(300) do
+            local TotalEggsLeft = GetEggsLeft()
+            if not _G.SettingsTable.BuyEgg then break end
+            if _G.SettingsTable.EnableBackup then
+                if TotalEggsLeft < 100 then
+                    _G.SettingsTable.EggType = _G.SettingsTable.BackupEggType
+                    _G.SettingsTable.EggTP = _G.SettingsTable.BackupEggTP
+                    _G.SettingsTable.WorldOption = _G.SettingsTable.BackupWorldOption
+                    _G.PlaceHolders.BackupActive = "Yes"
+                    if StartEggTP then
+                        TweenToEgg()
+                        StartEggTP = false
+                    end
+                    if not StartEggTP then
+                        local username = game:GetService("Players").LocalPlayer.Name
+                        local BackupCount2 = 0
+                        BackupCount2 = game:GetService("Players")[username].leaderstats.Eggs.Value
+                        if BackupCount1 == BackupCount2 then
+                            TweenToEgg()
+                        else
+                            local BackupEggDifference = BackupCount2 - BackupCount1
+                            BackupCount1 = BackupCount1 + BackupEggDifference
+                        end
+                    end
+                end
+            end
+        end
+    end)
+end
+function PetInventoryBackup()
+    spawn(function()
+        while wait(30) do
+            if not _G.SettingsTable.BuyEgg then break end
+            if _G.SettingsTable.EnableBackup then
+                local GetLoadModule = require(game.ReplicatedStorage.LoadModule);
+                local GetPetStorage = GetLoadModule("GetPetStorage");
+                local GetAddCommas = GetLoadModule("AddCommas");
+                local GetLocalData = GetLoadModule("LocalData");
+                local GetPetsOwned = GetLocalData:GetData("Pets")
+                local PetsOwned = GetAddCommas(#GetPetsOwned)
+                local PetStorage = GetPetStorage(GetLocalData:GetData())
+                local PetStorage1 = PetStorage - 10
+                local PetsOwned1 = tonumber(FormatNumber(PetsOwned))
+                if PetsOwned1 >= PetStorage1 then
+                    _G.SettingsTable.EggType = "Basic Egg"
+                    _G.SettingsTable.EggTP = "Basic Egg"
+                    _G.SettingsTable.WorldOption = "Surface"
+                    _G.PlaceHolders.BackupActive = "Yes (Pet Inventory Backup)"
+                    TweenToEgg()
+                    break
+                end
+            end
+        end
+    end)
+end
 
+
+
+-- Stats Tracker
 function ActivateStatsTracker()
     spawn(function()
         loadstring(game:HttpGet(("https://raw.githubusercontent.com/Buddy25112/StatTrackers/main/MS2StatTracker.lua"),true))()
     end)
 end
 
+
+
+-- Misc Functions
+function TeleportToLayer()
+    spawn(function()
+        local args = {
+            [1] = _G.SettingsTable.LayerOption
+        }
+
+        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+    end)
+end
+function UnlockLayer()
+    spawn(function()
+        local args = {
+            [1] = _G.SettingsTable.LayerOption .. "Sell"
+        }
+
+        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+    end)
+end
+function InstantTeleportToLayer()
+    spawn(function()
+        local args = {
+            [1] = _G.SettingsTable.InstantWorldOption
+        }
+        
+        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
+    end)
+end
 function SetFPSValue()
     spawn(function()
         setfpscap(_G.SettingsTable.FPSSettings)
     end)
 end
 
-function ClaimGroupBenefits()
-    spawn(function()
-        while wait(5) do
-            if not _G.SettingsTable.ClaimGroupBenefits then break end
-            game:GetService("ReplicatedStorage").Functions.ClaimGroupBenefits:InvokeServer()
-        end
-    end)
-end
 
-function BuyLuckyBoost1Hour()
-    spawn(function()
-        while wait(5) do
-            if not _G.SettingsTable.BuyLucky1Hour then break end
-            local args = {
-                [1] = "Lucky",
-                [2] = 1
+
+-- Settings Functions
+function SaveSettingsTableSettings()
+    local json
+    local HttpService = game:GetService("HttpService")
+    if (writefile) then
+        json = HttpService:JSONEncode(_G.SettingsTable)
+        writefile(SettingsTableName, json)
+        game.StarterGui:SetCore(
+               	"SendNotification",
+            {
+                Title = "SUCCESS!",
+                Text = "Settings Have Been Saved",
+                Duration = 5
             }
-
-            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
-        end
-    end)
+        )
+    end
+end
+function SaveSettingsSecretsList()
+    local json
+    local HttpService = game:GetService("HttpService")
+    if (writefile) then
+        json = HttpService:JSONEncode(_G.SecretsList)
+        writefile(SecretsListName, json)
+    end
+end
+function LoadSettingsSecretsList()
+    local HttpService = game:GetService("HttpService")
+    if (readfile and isfile and isfile(SecretsListName)) then
+        _G.SecretsList = HttpService:JSONDecode(readfile(SecretsListName))
+    end
 end
 
-function BuyLuckyBoost2Hour()
-    spawn(function()
-        while wait(5) do
-            if not _G.SettingsTable.BuyLucky2Hour then break end
-            local args = {
-                [1] = "Lucky",
-                [2] = 2
-            }
 
-            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
-        end
-    end)
-end
 
-function BuySuperLuckyBoost1Hour()
-    spawn(function()
-        while wait(5) do
-            if not _G.SettingsTable.BuySuperLucky1Hour then break end
-            local args = {
-                [1] = "Super Lucky",
-                [2] = 1
-            }
-
-            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
-        end
-    end)
-end
-
-function BuySuperLuckyBoost2Hour()
-    spawn(function()
-        while wait(5) do
-            if not _G.SettingsTable.BuySuperLucky2Hour then break end
-            local args = {
-                [1] = "Super Lucky",
-                [2] = 2
-            }
-
-            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
-        end
-    end)
-end
-
-function BuyOmegaLuckyBoost1Hour()
-    spawn(function()
-        while wait(5) do
-            if not _G.SettingsTable.BuyOmegaLucky1Hour then break end
-            local args = {
-                [1] = "Omega Lucky",
-                [2] = 1
-            }
-
-            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
-        end
-    end)
-end
-
-function BuyOmegaLuckyBoost2Hour()
-    spawn(function()
-        while wait(5) do
-            if not _G.SettingsTable.BuyOmegaLucky2Hour then break end
-            local args = {
-                [1] = "Omega Lucky",
-                [2] = 2
-            }
-
-            game:GetService("ReplicatedStorage").Events.BuyBoost:FireServer(unpack(args))
-        end
-    end)
-end
-
+-- Event Functions
 function BuyChristmasBoosts1()
     spawn(function()
         while wait(5) do
@@ -1047,7 +1093,6 @@ function BuyChristmasBoosts1()
         end
     end)
 end
-
 function BuyChristmasBoosts2()
     spawn(function()
         while wait(5) do
@@ -1060,7 +1105,6 @@ function BuyChristmasBoosts2()
         end
     end)
 end
-
 function BuyChristmasBoosts3()
     spawn(function()
         while wait(5) do
@@ -1073,101 +1117,130 @@ function BuyChristmasBoosts3()
         end
     end)
 end
-
-function AutoFactoryCraft1()
+function AutoBuySpins()
     spawn(function()
-        while wait(30) do
-            if not _G.SettingsTable.AutoCraft then break end
-            local args = {
-                [1] = 1
-            }
-            
-            game:GetService("ReplicatedStorage").Events.ClaimFactoryCraft:FireServer(unpack(args))
-            wait(1)
-            local args = {
-                [1] = _G.SettingsTable.GemType,
-                [2] = 1
-            }
-            
-            game:GetService("ReplicatedStorage").Events.StartFactoryCraft:FireServer(unpack(args))
+        while wait() do 
+            if not _G.SettingsTable.AutoBuySpins then break end
+            game:GetService("ReplicatedStorage").Events.BuySpinToWin:FireServer()
+        end
+    end)
+end
+function AutoCollectSpins()
+    spawn(function()
+        while wait() do 
+            if not _G.SettingsTable.AutoCollectSpins then break end
+            game:GetService("ReplicatedStorage").Events.ClaimSpinToWin:FireServer()
+        end
+    end)
+end
+function AutoSpinWheel()
+    spawn(function()
+        while wait() do 
+            if not _G.SettingsTable.AutoSpinWheel then break end
+            game:GetService("ReplicatedStorage").Events.PlaySpinToWin:FireServer()
         end
     end)
 end
 
-function AutoFactoryCraft2()
-    spawn(function()
-        while wait(30) do
-            if not _G.SettingsTable.AutoCraft then break end
-            local args = {
-                [1] = 2
-            }
+function GetTimeLeft(Value)
+        local Eggsleft = GetEggsLeft()
+        local EggsPerHour = EggsHatchedPerHour
+        if Eggsleft == 0 or Eggsleft == "Invalid Input or Not Updated" then
+            local TimeNumber = "None"
+            return TimeNumber
+        elseif EggsPerHour == 0 then
+            local TimeNumber = "Infinity"
+            return TimeNumber
+        else
+            local Time1 = Eggsleft / EggsPerHour
+            local Time2 = Time1 * 60
+            local Time3 = Time2 * 60
+            local test = Time3 -- In seconds
+            local TimeNumber
+            if test < 60 then
+                TimeNumber = test .. " seconds"
+                
+            elseif test == 60 then
+                TimeNumber = "1 Minute"
             
-            game:GetService("ReplicatedStorage").Events.ClaimFactoryCraft:FireServer(unpack(args))
-            wait(1)
-            local args = {
-                [1] = _G.SettingsTable.GemType,
-                [2] = 2
-            }
+            elseif test > 60 and test < 3600 then
+                local Min1 = test / 60
+                local Min2 = math.floor(Min1)
+                local Min3 = Min2 * 60
+                local Sec1 = test - Min3
+                local TimeNumber2
+                if test == 61 then
+                    TimeNumber2 = Min2 .. " Minute " .. Sec1 .. " Second"
+                elseif test > 61 and test < 120 then
+                    TimeNumber2 = Min2 .. " Minute " .. Sec1 .. " Seconds"
+                else
+                    TimeNumber2 = Min2 .. " Minutes " .. Sec1 .. " Seconds"
+                end
+                TimeNumber = TimeNumber2
+                
+            elseif test > 3599 and test < 3661 then
+                TimeNumber = "1 Hour"
             
-            game:GetService("ReplicatedStorage").Events.StartFactoryCraft:FireServer(unpack(args))
+            elseif test > 3660 and test < 86400 then 
+                local Hr1 = test / 3600
+                local Hr2 = math.floor(Hr1)
+                local Hr3 = Hr2 * 3600
+                local Min1 = test - Hr3
+                local Min2 = Min1 / 60
+                local Min3 = math.floor(Min2)
+                local TimeNumber2
+                if test > 3660 and test < 3720  then
+                    TimeNumber2 = Hr2 .. " Hour " .. Min3 .. " Minute"
+                elseif test > 3720 and test < 7200 then
+                    TimeNumber2 = Hr2 .. " Hour " .. Min3 .. " Minutes"
+                else
+                    TimeNumber2 = Hr2 .. " Hours " .. Min3 .. " Minutes"
+                end
+                TimeNumber = TimeNumber2
+            
+            elseif test > 86399 and test < 90001 then
+                TimeNumber = "1 Day"
+            
+            elseif test > 90000 and test < 604800 then
+                local Day1 = test / 86400
+                local Day2 = math.floor(Day1)
+                local Day3 = Day2 * 86400
+                local Hr1 = test - Day3
+                local Hr2 = Hr1 / 3600
+                local Hr3 = math.floor(Hr2)
+                local TimeNumber2
+                if test > 90000 and test < 93600  then
+                    TimeNumber2 = Day2 .. " Day " .. Hr3 .. " Hour"
+                elseif test > 93600 and test < 172800 then
+                    TimeNumber2 = Day2 .. " Day " .. Hr3 .. " Hours"
+                else
+                    TimeNumber2 = Day2 .. " Days " .. Hr3 .. " Hours"
+                end
+                TimeNumber = TimeNumber2
+            
+            elseif test > 604799 and test < 691201 then
+                TimeNumber = "1 Week"
+            
+            elseif test > 691200 then
+                local Week1 = test / 604800
+                local Week2 = math.floor(Week1)
+                local Week3 = Week2 * 604800
+                local Day1 = test - Week3
+                local Day2 = Day1 / 86400
+                local Day3 = math.floor(Day2)
+                local TimeNumber2
+                if test > 691200 and test < 777600 then
+                    TimeNumber2 = Week2 .. " Week " .. Day3 .. " Day"
+                elseif test > 777600 and test < 1209600 then
+                    TimeNumber2 = Week2 .. " Week " .. Day3 .. " Days"
+                else
+                    TimeNumber2 = Week2 .. " Weeks " .. Day3 .. " Days"
+                end
+                TimeNumber = tostring(TimeNumber2)
+            end
+            print(TimeNumber)
+            return TimeNumber
         end
-    end)
-end
-
-function AutoFactoryCraft3()
-    spawn(function()
-        while wait(30) do
-            if not _G.SettingsTable.AutoCraft then break end
-            local args = {
-                [1] = 3
-            }
-            
-            game:GetService("ReplicatedStorage").Events.ClaimFactoryCraft:FireServer(unpack(args))
-            wait(1)
-            local args = {
-                [1] = _G.SettingsTable.GemType,
-                [2] = 3
-            }
-            
-            game:GetService("ReplicatedStorage").Events.StartFactoryCraft:FireServer(unpack(args))
-        end
-    end)
-end
-
-function TeleportToLayer()
-    spawn(function()
-        local args = {
-            [1] = _G.SettingsTable.LayerOption
-        }
-
-        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
-    end)
-end
-
-function UnlockLayer()
-    spawn(function()
-        local args = {
-            [1] = _G.SettingsTable.LayerOption .. "Sell"
-        }
-
-        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
-    end)
-end
-
-function SkipAnimation()
-    spawn(function()
-        game.ReplicatedStorage.ClientModules.Other.OpenEgg.HatchGui:Destroy()
-    end)
-end
-
-function InstantTeleportToLayer()
-    spawn(function()
-        local args = {
-            [1] = _G.SettingsTable.InstantWorldOption
-        }
-        
-        game:GetService("ReplicatedStorage").Events.Teleport:FireServer(unpack(args))
-    end)
 end
 
 
@@ -1199,86 +1272,67 @@ end)
 -- Beginning of UI
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/Buddy25112/OtherThings/main/RayfieldNotBroken.lua'))()
 local Window = Rayfield:CreateWindow({
-	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.2.9",
+	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.3.0",
 	LoadingTitle = "Mining Simulator 2 GUI",
 	LoadingSubtitle = "By PetSimulatorXPlayer",
-	ConfigurationSaving = {
-		Enabled = false,
-		FolderName = "Hatchers Hub MS2", -- Create a custom folder for your hub/game
-		FileName = username .. "_Settings_MS2.txt"
-	},
-        Discord = {
-        	Enabled = true,
-        	Invite = "83aFw8rGM8", -- The Discord invite code, do not include discord.gg/
-        	RememberJoins = true -- Set this to false to make them join the discord every time they load it up
-        },
-	KeySystem = false, -- Set this to true to use our key system
-	KeySettings = {
-		Title = "Sirius Hub",
-		Subtitle = "Key System",
-		Note = "Join the discord (discord.gg/sirius)",
-		FileName = "SiriusKey",
-		SaveKey = true,
-		GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-		Key = "Hello"
-	}
+
 })
 
 
 
 -- UI Tabs
 -- Credits UI
-local CreditsTab = Window:CreateTab("Credits")
+local CreditsTab = Window:CreateTab("📜 | Credits")
 local CreditsSection = CreditsTab:CreateSection("------------------------------- Hatchers Hub MS2 -------------------------------")
 local CreditsSection1 = CreditsTab:CreateSection("Creator/Dev: PetSimulatorXPlayer#5011")
 local CreditsSection2 = CreditsTab:CreateSection("Helper: Cor#0002")
 local CreditsSection3 = CreditsTab:CreateSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection4 = CreditsTab:CreateSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:CreateSection("--------------------------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-04-28")
-local CreditsSection7 = CreditsTab:CreateSection("Last Update: Spring Event PT3 Additions")
+local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-05-09
+local CreditsSection7 = CreditsTab:CreateSection("Last Update: Added new egg + QoL features"
 local CreditsSection8 = CreditsTab:CreateSection("Upcoming Update: Pet Hatcher")
 local CreditsSection9 = CreditsTab:CreateSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:CreateSection("-------------------------------------------------------------------------------------")
 
 -- AutofarmUI
-local AutoFarmTab = Window:CreateTab("AutoFarm")
+local AutoFarmTab = Window:CreateTab("🏭 | Autofarm")
 
 -- EggFarmingUI
-local EggFarmingTab = Window:CreateTab("Egg Farming")
+local EggFarmingTab = Window:CreateTab("🥚 | Egg Farming")
 
 -- StatsTrackerUI
-local StatsTrackerTab = Window:CreateTab("Stats Tracker")
+local StatsTrackerTab = Window:CreateTab("📊 | Stats Tracker")
 
 -- MiscUI
-local MiscTab = Window:CreateTab("Miscellaneous")
+local MiscTab = Window:CreateTab("♻️ | Miscellaneous")
 
 -- Other GUI's
-local OtherUITab = Window:CreateTab("Other GUI's")
+local OtherUITab = Window:CreateTab(" Other GUI's")
 
 -- SettingsUI
-local SettingsTab = Window:CreateTab("Settings")
+local SettingsTab = Window:CreateTab("⚙️ | Settings")
 
 -- HelpUI
-local HelpTab = Window:CreateTab("Help")
+local HelpTab = Window:CreateTab("✋ | Help")
 
 
 
 -- Tab Toggles
 -- AutoFarm
-local AutoFarmSelection = AutoFarmTab:CreateSection("Auto Farm Gems (Factory)")
+local AutoFarmSelection = AutoFarmTab:CreateSection("💎 Auto Farm Gems (Factory) 💎")
 local CurrencyParagraph = AutoFarmTab:CreateParagraph({
-    Title = "All World Currency Counts", 
-    Content = "Coins: " .. FormatCurrency(CoinsCount) .. "\nCyber Tokens: " .. FormatCurrency(SpaceCoinsCount) .. "\nShells: " .. FormatCurrency(ShellsCount) .. "\nCandy: " .. FormatCurrency(CandyCount) .. "\nBricks: " .. FormatCurrency(BricksCount) .. "\nCrystals: " .. FormatCurrency(CrystalCount) .. "\nStars: " .. FormatCurrency(StarsCount)
+    Title = "All World Currency Counts",
+    Content = "💰 Coins: \n🚀 Cyber Tokens: \n🐚 Shells: \n🍬 Candy: \n🧱 Bricks: \n🔮 Crystals: \n✨ Stars: "
 })
 local AutoFactoryCraftParagraph = AutoFarmTab:CreateParagraph({
     Title = "Current Factory Settings", 
-    Content = "Craft Option: " .. _G.SettingsTable.GemType .. "\nActivated: " .. _G.PlaceHolders.AutoFactoryCraftPlaceHolder
+    Content = "🔨 Craft Option: \n🖱️ Activated: "
 })
 
 local CraftOption = AutoFarmTab:CreateDropdown({
-	Name = "Craft Option (Factory)",
-	Options = {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5", "Bricks 1", "Bricks 2", "Bricks 3", "Bricks 4", "Bricks 5", "Crystals 1", "Crystals 2", "Crystals 3", "Crystals 4", "Crystals 5", "Stars 1", "Stars 2", "Stars 3", "Stars 4", "Stars 5"},
+	Name = "🔨 Craft Option (Factory)",
+	Options = FactorySettings,
 	CurrentOption = "Coins 1",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(GemTypetxt)
@@ -1286,28 +1340,26 @@ local CraftOption = AutoFarmTab:CreateDropdown({
 	end,
 })
 local AutoFactoryCraft = AutoFarmTab:CreateToggle({
-	Name = "Auto Factory Craft",
+	Name = "🏭 Auto Factory Craft",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
         _G.SettingsTable.AutoCraft = bool
         if bool then
-            AutoFactoryCraft1()
-            AutoFactoryCraft2()
-            AutoFactoryCraft3()
+            AutoFactoryCraft()
             _G.PlaceHolders.AutoFactoryCraftPlaceHolder = "Yes"
         else
             _G.PlaceHolders.AutoFactoryCraftPlaceHolder = "No"
         end
 	end,
 })
-local AutoGroupRewardsSection = AutoFarmTab:CreateSection("Auto Collect Features")
+local AutoGroupRewardsSection = AutoFarmTab:CreateSection("📮 Auto Collect Features 📮")
 local AutoGroupRewardsParagraph = AutoFarmTab:CreateParagraph({
     Title = "Current Auto Collect Settings", 
-    Content = "Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder .. "\nAuto Collect Event Boosts: " .. _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder
+    Content = "🎁 Auto Collect Group Rewards: \n🐰 Auto Collect Event Boosts: "
 })
 local AutoCollectGroupRewards = AutoFarmTab:CreateToggle({
-	Name = "Auto Collect Group Rewards",
+	Name = "🎁 Auto Collect Group Rewards",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1363,7 +1415,7 @@ local AutoCollectGroupRewards = AutoFarmTab:CreateToggle({
 --	end,
 --})
  local AutoBuyChristmasBoosts = AutoFarmTab:CreateToggle({
- 	Name = "Auto Buy Event Boosts",
+ 	Name = "🐰 Auto Buy Event Boosts",
  	CurrentValue = false,
  	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
  	Callback = function(bool)
@@ -1382,13 +1434,13 @@ local AutoCollectGroupRewards = AutoFarmTab:CreateToggle({
 
 
 -- Auto Buy Shop Boosts
-local AutoShopBoostsSection = AutoFarmTab:CreateSection("Auto Shop Boosts")
+local AutoShopBoostsSection = AutoFarmTab:CreateSection("🏪 Auto Shop Boosts 🏪")
 local AutoBuyBoostsParagraph = AutoFarmTab:CreateParagraph({
     Title = "Current Auto Buy Boosts Settings", 
-    Content = "Auto Buy Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyLucky1HourPlaceHolder .. "\nAuto Buy Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyLucky2HourPlaceHolder .. "\nAuto Buy Super Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuySuperLucky1HourPlaceHolder .. "\nAuto Buy Super Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuySuperLucky2HourPlaceHolder .. "\nAuto Buy Omega Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyOmegaLucky1HourPlaceHolder .. "\nAuto Buy Omega Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyOmegaLucky2HourPlaceHolder
+    Content = "🍀 Auto Buy Lucky Boost (1 Hour): \n🍀 Auto Buy Lucky Boost (2 Hours): \n🌟🍀 Auto Buy Super Lucky Boost (1 Hour): \n🌟🍀 Auto Buy Super Lucky Boost (2 Hours): \n🔮🍀 Auto Buy Omega Lucky Boost (1 Hour): \n🔮🍀 Auto Buy Omega Lucky Boost (2 Hours): "
 })
 local AutoBuyLucky1Hours = AutoFarmTab:CreateToggle({
-	Name = "Auto Buy Lucky (1 Hour)",
+	Name = "🍀 Auto Buy Lucky (1 Hour)",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1402,7 +1454,7 @@ local AutoBuyLucky1Hours = AutoFarmTab:CreateToggle({
 	end,
 })
 local AutoBuyLucky2Hours = AutoFarmTab:CreateToggle({
-	Name = "Auto Buy Lucky (2 Hour)",
+	Name = "🍀 Auto Buy Lucky (2 Hour)",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1416,7 +1468,7 @@ local AutoBuyLucky2Hours = AutoFarmTab:CreateToggle({
 	end,
 })
 local AutoBuySuperLucky1Hours = AutoFarmTab:CreateToggle({
-	Name = "Auto Buy Super Lucky (1 Hour)",
+	Name = "🌟🍀 Auto Buy Super Lucky (1 Hour)",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1430,7 +1482,7 @@ local AutoBuySuperLucky1Hours = AutoFarmTab:CreateToggle({
 	end,
 })
 local AutoBuySuperLucky2Hours = AutoFarmTab:CreateToggle({
-	Name = "Auto Buy Super Lucky (2 Hour)",
+	Name = "🌟🍀 Auto Buy Super Lucky (2 Hour)",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1444,7 +1496,7 @@ local AutoBuySuperLucky2Hours = AutoFarmTab:CreateToggle({
 	end,
 })
 local AutoBuyOmegaLucky1Hours = AutoFarmTab:CreateToggle({
-	Name = "Auto Buy Omega Lucky (1 Hour)",
+	Name = "🔮🍀 Auto Buy Omega Lucky (1 Hour)",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1458,7 +1510,7 @@ local AutoBuyOmegaLucky1Hours = AutoFarmTab:CreateToggle({
 	end,
 })
 local AutoBuyOmegaLucky2Hours = AutoFarmTab:CreateToggle({
-	Name = "Auto Buy Omega Lucky (2 Hour)",
+	Name = "🔮🍀 Auto Buy Omega Lucky (2 Hour)",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1472,13 +1524,16 @@ local AutoBuyOmegaLucky2Hours = AutoFarmTab:CreateToggle({
 	end,
 })
 
-local AutoEnableBoostsSection = AutoFarmTab:CreateSection("Auto Enable Boosts")
+
+
+-- Enable Boosts
+local AutoEnableBoostsSection = AutoFarmTab:CreateSection("🍀 Auto Enable Boosts 🍀")
 local AutoEnableBoostsParagraph = AutoFarmTab:CreateParagraph({
     Title = "⚠️ WARNING ⚠️", 
     Content = "USING THESE FEATURES CAN RESULT IN ALL OF YOUR BOOSTS BEING USED UP! ALTHOUGH ITS UNLIKELY, ITS STILL POSSIBLE.\n⚠️USE AT YOUR OWN RISK!⚠️"
 })
 local AutoEnableSmartBoostsSlow = AutoFarmTab:CreateToggle({
-	Name = "Smart Auto Enable Boosts (Slow)",
+	Name = "🍀🐢 Smart Auto Enable Boosts (Slow)",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1488,9 +1543,8 @@ local AutoEnableSmartBoostsSlow = AutoFarmTab:CreateToggle({
         end
 	end,
 })
-
 local AutoEnableSmartBoostsSlow = AutoFarmTab:CreateToggle({
-	Name = "Smart Auto Enable Boosts (Fast)",
+	Name = "🍀💨 Smart Auto Enable Boosts (Fast)",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1503,27 +1557,27 @@ local AutoEnableSmartBoostsSlow = AutoFarmTab:CreateToggle({
 
 
 
-
-
-
--- Egg Farming
 -- Egg Settings
-local AutoHatchEggSection = EggFarmingTab:CreateSection("Auto Hatch Egg")
+local AutoHatchEggSection = EggFarmingTab:CreateSection("🥚 Auto Hatch Egg 🥚")
 local EggFarmingParagraph = EggFarmingTab:CreateParagraph({
     Title = "Current Egg Settings", 
-    Content = "Eggs Hatched: \nSecrets Hatched: \nCurrent Egg: " .. _G.SettingsTable.EggType .. "\nMulti/Quad Hatch: " .. _G.PlaceHolders.MultiHatchPlaceHolder .. "\nSkip Animation: " .. _G.PlaceHolders.SkipAnimationPlaceHolder .. "\nAuto Hatch Egg: " .. _G.PlaceHolders.AutoHatchEggPlaceHolder .. "\nEggs Left: NONE" 
+    Content = "🐣 Current Egg: \n✖️ Multi/Quad Hatch: \n⏭️ Skip Animation: \n🔃 Auto Hatch Egg: "
+})
+local EggStatsParagraph = EggFarmingTab:CreateParagraph({
+    Title = "Egg Stats",
+    Content = "🥚 Eggs Hatched: \n🤫 Secrets Hatched: \n🥚 Eggs Left: \n⏱️ Time Left: \n🥚⏱️ Eggs Per Hour: \n🥚⏱️ Eggs Per Day: "
 })
 local ChooseEggToHatchDropdown = EggFarmingTab:CreateDropdown({
-	Name = "Choose Egg: (Dropdown)",
-	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Delicate Egg", "Yolk Egg", "Bunny Egg", "Critter Egg", "Floral Egg", "Guardian Egg", "Magnificent Egg"},
-	CurrentOption = "Basic Egg",
+	Name = "🐣⬇️ Choose Egg: (Dropdown)",
+	Options = EggSettings,
+	CurrentOption = "Choose an Egg",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(EggTypetxt)
         _G.SettingsTable.EggType = EggTypetxt
 	end,
 })
 local ChooseEggToHatchText = EggFarmingTab:CreateInput({
-	Name = "Choose Egg: (Text)",
+	Name = "🐣📝 Choose Egg: (Text)",
 	PlaceholderText = "Type The Name Of The Egg",
 	RemoveTextAfterFocusLost = false,
 	Callback = function(EggTypetxt)
@@ -1531,7 +1585,7 @@ local ChooseEggToHatchText = EggFarmingTab:CreateInput({
 	end,
 })
 local QuadOrMultiEggHatch = EggFarmingTab:CreateToggle({
-	Name = "Quad/Multi Egg Hatch",
+	Name = "✖️ Quad/Multi Egg Hatch",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1544,7 +1598,7 @@ local QuadOrMultiEggHatch = EggFarmingTab:CreateToggle({
 	end,
 })
 local StartHatchingEgg = EggFarmingTab:CreateToggle({
-	Name = "Start Hatching Egg",
+	Name = "🥚 Start Hatching Egg",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1561,7 +1615,7 @@ local StartHatchingEgg = EggFarmingTab:CreateToggle({
 	end,
 })
 local SkipAnimation = EggFarmingTab:CreateButton({
-	Name = "Skip Animation",
+	Name = "⏭️ Skip Animation",
 	Callback = function()
         _G.SettingsTable.SkipAnimation = true
             SkipAnimation()
@@ -1573,30 +1627,32 @@ local SkipAnimation = EggFarmingTab:CreateButton({
 	end,
 })
 local DisableSkipAnimation = EggFarmingTab:CreateButton({
-	Name = "Disable Skip Animation (Rejoin)",
+	Name = "⏭️❌ Disable Skip Animation (Rejoin)",
 	Callback = function()
         _G.SettingsTable.SkipAnimation = false
         _G.PlaceHolders.SkipAnimationPlaceHolder = "Deactivated (Rejoin Game)"
 	end,
 })
 
+
+
 -- Egg Teleport Settings
-local AutoTeleportSection = EggFarmingTab:CreateSection("Auto Teleport To Egg")
+local AutoTeleportSection = EggFarmingTab:CreateSection("⌛ Auto Teleport To Egg ⌛")
 local AutoTeleportParagraph = EggFarmingTab:CreateParagraph({
     Title = "Current Auto Teleport Settings", 
-    Content = "Current Egg: " .. _G.SettingsTable.EggTP .. "\nCurrent World: " .. _G.SettingsTable.WorldOption .. "\nActivated: " .. _G.PlaceHolders.AutoTeleportToEggPlaceHolder 
+    Content = "🐣 Current Egg: \n🏝️ Current World: \n🖱️ Activated: "
 })
 local ChooseEggToTPDropdown = EggFarmingTab:CreateDropdown({
-	Name = "Choose Egg: (Dropdown)",
-	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Delicate Egg", "Yolk Egg", "Bunny Egg", "Critter Egg", "Floral Egg", "Guardian Egg", "Magnificent Egg"},
-	CurrentOption = "Basic Egg",
+	Name = "🐣⬇️ Choose Egg: (Dropdown)",
+	Options = EggSettings,
+	CurrentOption = "Choose an Egg",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Eggtptxt)
         _G.SettingsTable.EggTP = Eggtptxt
 	end,
 })
 local ChooseEggToTPText = EggFarmingTab:CreateInput({
-	Name = "Choose Egg: (Text)",
+	Name = "🐣📝 Choose Egg: (Text)",
 	PlaceholderText = "Type The Name Of The Egg",
 	RemoveTextAfterFocusLost = false,
 	Callback = function(Eggtptxt)
@@ -1604,16 +1660,16 @@ local ChooseEggToTPText = EggFarmingTab:CreateInput({
 	end,
 })
 local WorldToTweenTo = EggFarmingTab:CreateDropdown({
-	Name = "World",
-	Options = {"Surface", "The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Mystic Forest", "Rainbow Land", "Spring World"},
-	CurrentOption = "Surface",
+	Name = "🏝️ Choose World:",
+	Options = WorldSettings,
+	CurrentOption = "Choose a World",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(WorldTextOption)
         _G.SettingsTable.WorldOption = WorldTextOption
 	end,
 })
 local TeleportToEgg = EggFarmingTab:CreateButton({
-	Name = "Teleport To Egg",
+	Name = "⌛ Teleport To Egg",
 	Callback = function()
         _G.SettingsTable.TpToEgg = true
         if _G.SettingsTable.TpToEgg then
@@ -1625,16 +1681,18 @@ local TeleportToEgg = EggFarmingTab:CreateButton({
 	end,
 })
 
+
+
 -- Egg Backup Settings
-local EggBackupSection = EggFarmingTab:CreateSection("Egg Backup")
+local EggBackupSection = EggFarmingTab:CreateSection("🐣 Egg Backup 🐣")
 local EggBackupParagraph = EggFarmingTab:CreateParagraph({
     Title = "Current Egg Backup Settings", 
-    Content = "Info: Teleports to a backup egg if under 100 eggs left on main egg \nBackup Egg: " .. _G.SettingsTable.BackupEggType .. "\nBackup World: " .. _G.SettingsTable.BackupWorldOption .. "\nActivated: " .. _G.PlaceHolders.EnableBackupPlaceHolder .. "\nBackup Active: " .. _G.PlaceHolders.BackupActive
+    Content = "Info: Teleports to a backup egg if under 100 eggs left on main egg \n🐣 Backup Egg: \n🏝️ Backup World: \n🖱️ Activated: \n⌛ Backup Active: "
 })
 local ChooseEggToHatchDropdownBackup = EggFarmingTab:CreateDropdown({
-	Name = "Choose Backup Egg: (Dropdown)",
-	Options = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Delicate Egg", "Yolk Egg", "Bunny Egg", "Critter Egg", "Floral Egg", "Guardian Egg", "Magnificent Egg"},
-	CurrentOption = "Basic Egg",
+	Name = "🐣⬇️ Choose Backup Egg: (Dropdown)",
+	Options = EggSettings,
+	CurrentOption = "Choose an Egg",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(EggBackupTypetxt)
         _G.SettingsTable.BackupEggType = EggBackupTypetxt
@@ -1642,7 +1700,7 @@ local ChooseEggToHatchDropdownBackup = EggFarmingTab:CreateDropdown({
 	end,
 })
 local ChooseEggToHatchTextBackup = EggFarmingTab:CreateInput({
-	Name = "Choose Backup Egg: (Text)",
+	Name = "🐣📝 Choose Backup Egg: (Text)",
 	PlaceholderText = "Type The Name Of The Egg",
 	RemoveTextAfterFocusLost = false,
 	Callback = function(EggBackupTypetxt)
@@ -1651,16 +1709,16 @@ local ChooseEggToHatchTextBackup = EggFarmingTab:CreateInput({
 	end,
 })
 local BackupWorldToTweenTo = EggFarmingTab:CreateDropdown({
-	Name = "World",
-	Options = {"Surface", "The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Mystic Forest", "Rainbow Land", "Spring World"},
-	CurrentOption = "Surface",
+	Name = "🏝️ Choose World: ",
+	Options = WorldSettings,
+	CurrentOption = "Choose a World",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(WorldBackupTextOption)
         _G.SettingsTable.BackupWorldOption = WorldBackupTextOption
 	end,
 })
 local EnableBackupEgg = EggFarmingTab:CreateToggle({
-	Name = "Enable Backup",
+	Name = "🖱️ Enable Backup",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1676,17 +1734,17 @@ local EnableBackupEgg = EggFarmingTab:CreateToggle({
 
 
 -- Stat Tracker
-local StatsTrackerSection = StatsTrackerTab:CreateSection("Stats Tracker Settings")
+local StatsTrackerSection = StatsTrackerTab:CreateSection("📊 Stats Tracker Settings 📊")
 local StatsTrackerParagraph = StatsTrackerTab:CreateParagraph({
-    Title = "Current Stats Tracker Settings", 
-    Content = "Time Between Updates: (Seconds)" .. _G.PlaceHolders.IntervalsPlaceHolder .. "\nEmbed Color (Hex Value): " .. _G.PlaceHolders.ColorPlaceHolder .. "\nEgg Count: " .. _G.PlaceHolders.EggCountTrackerPlaceHolder .. "\nRebirth Count: " .. _G.PlaceHolders.RebirthCountTrackerPlaceHolder .. "\nBlocks Count " .. _G.PlaceHolders.BlockCountTrackerPlaceHolder .. "\nActivated: " .. _G.PlaceHolders.StatsTrackerActivationPlaceHolder
+    Title = "Current Stats Tracker Settings",
+    Content = "⌛ Time Between Updates (In Seconds): \n🌈 Embed Color (Hex Value): \n🥚 Egg Count: \n💖 Rebirth Count: \n⛏️ Blocks Count \n🖱️ Activated: "
 })
 local WebhookParagraph = StatsTrackerTab:CreateParagraph({
     Title = "Webhook Data", 
-    Content = "Webhook: " .. _G.PlaceHolders.WebhookPlaceHolder .. "\nWebhook Paragraph Error (Dev Issue): " .. _G.PlaceHolders.WebhookErrorPlaceHolder
+    Content = "📜 Webhook: \n \n \n "
 })
 local WebhookText = StatsTrackerTab:CreateInput({
-	Name = "Webhook: ",
+	Name = "📜 Webhook: ",
 	PlaceholderText = "Paste Your Webhook Here",
 	RemoveTextAfterFocusLost = false,
 	Callback = function(WebhookTypetxt)
@@ -1695,7 +1753,7 @@ local WebhookText = StatsTrackerTab:CreateInput({
 	end,
 })
 local IntervalsText = StatsTrackerTab:CreateInput({
-	Name = "Time Between Updates (In Seconds): ",
+	Name = "⌛ Time Between Updates (In Seconds): ",
 	PlaceholderText = "Type the time here",
 	RemoveTextAfterFocusLost = false,
 	Callback = function(IntervalsTypetxt)
@@ -1705,7 +1763,7 @@ local IntervalsText = StatsTrackerTab:CreateInput({
 	end,
 })
 local ColorDropdown = StatsTrackerTab:CreateDropdown({
-	Name = "Ember Color (Simple)",
+	Name = "🌈⬇️ Embed Color (Simple)",
 	Options = {"Red", "Orange", "Yellow", "Green", "Blue", "Purple"},
 	CurrentOption = "Red",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -1736,7 +1794,7 @@ local ColorDropdown = StatsTrackerTab:CreateDropdown({
 	end,
 })
 local ColorText = StatsTrackerTab:CreateInput({
-	Name = "Embed Color (Hex Value): ",
+	Name = "🌈📝 Embed Color (Hex Value): ",
 	PlaceholderText = "Paste the colors HEX value here",
 	RemoveTextAfterFocusLost = false,
 	Callback = function(ColorTypetxt)
@@ -1745,7 +1803,7 @@ local ColorText = StatsTrackerTab:CreateInput({
 	end,
 })
 local EggCountStatsTracker = StatsTrackerTab:CreateToggle({
-	Name = "Egg Count",
+	Name = "🥚 Egg Count",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1758,7 +1816,7 @@ local EggCountStatsTracker = StatsTrackerTab:CreateToggle({
 	end,
 })
 local RebirthCountStatsTracker = StatsTrackerTab:CreateToggle({
-	Name = "Rebirth Count",
+	Name = "💖 Rebirth Count",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1771,7 +1829,7 @@ local RebirthCountStatsTracker = StatsTrackerTab:CreateToggle({
 	end,
 })
 local BlockCountStatsTracker = StatsTrackerTab:CreateToggle({
-	Name = "Block Count",
+	Name = "⛏️ Block Count",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1784,7 +1842,7 @@ local BlockCountStatsTracker = StatsTrackerTab:CreateToggle({
 	end,
 })
 local StatsTrackerActivate = StatsTrackerTab:CreateButton({
-    Name = "Activate Stats Tracker",
+    Name = "🖱️ Activate Stats Tracker",
 	Callback = function()
         _G.SettingsTable.StatsTrackerActivated = true
         if _G.SettingsTable.StatsTrackerActivated then
@@ -1796,7 +1854,7 @@ local StatsTrackerActivate = StatsTrackerTab:CreateButton({
 	end,
 })
 local StatsTrackerDisable = StatsTrackerTab:CreateButton({
-	Name = "Dectivate Stats Tracker (Rejoin)",
+	Name = "🖱️❌ Dectivate Stats Tracker (Rejoin)",
 	Callback = function()
         _G.SettingsTable.StatsTrackerActivated = false
         _G.PlaceHolders.StatsTrackerActivationPlaceHolder = "No (Rejoin)"
@@ -1805,55 +1863,60 @@ local StatsTrackerDisable = StatsTrackerTab:CreateButton({
 
 
 
--- Misc
 -- Layers Settings
-local LayersSection = MiscTab:CreateSection("Layers")
+local LayersSection = MiscTab:CreateSection("🏝️ Layers 🏝️")
 local LayerToTpTo = MiscTab:CreateDropdown({
-	Name = "Layer",
-	Options = {"Hidden Treasure", "Frozen Depths", "Gloomy Basin", "Molten Core", "The Underworld", "Crystal Cavern", "Cyber Sewers", "Cosmic Abyss", "Cyber Core", "Glitched Chasm", "Rocky Depths", "Sea Shell Shallows", "City of Gold", "Dark Coral Depths", "Chocolate Caves", "Gummy Depths", "Cupcake Cavern", "Donut Depths", "Blocky Basin", "Bear Depths", "Building Depths", "Pixel Park", "Glowing Depths", "Neon Rocks", "Mystic Cavern", "Magenta Forest", "Rainbow Depths", "Violet Forest", "Spring World Surface"},
-	CurrentOption = "Hidden Treasure",
+	Name = "🏝️ Layer:",
+	Options = LayerSettings,
+	CurrentOption = "Choose a Layer",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(LayerTextOption)
         _G.SettingsTable.LayerOption = LayerTextOption
 	end,
 })
 local TeleportToLayer = MiscTab:CreateButton({
-	Name = "Teleport to Layer",
+	Name = "⌛ Teleport to Layer",
 	Callback = function()
         TeleportToLayer()
 	end,
 })
 local UnlockLayer = MiscTab:CreateButton({
-	Name = "Unlock Layer",
+	Name = "🔓 Unlock Layer",
 	Callback = function()
         UnlockLayer()
 	end,
 })
 
+
+
 -- Worlds Settings
-local WorldsSection = MiscTab:CreateSection("Worlds")
+local WorldsSection = MiscTab:CreateSection("🌎 Worlds 🌎")
 local WorldToTpTo = MiscTab:CreateDropdown({
-	Name = "World",
-	Options = {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "GemGenie", "Mystic Forest", "Rainbow Land", "Spring World"},
-	CurrentOption = "The Overworld",
+	Name = "🌎 World:",
+	Options = TpWorldSettings,
+	CurrentOption = "Choose a World",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(InstantWorldTextOption)
         _G.SettingsTable.InstantWorldOption = InstantWorldTextOption
 	end,
 })
 local TeleportToWorld = MiscTab:CreateButton({
-	Name = "Teleport To World",
+	Name = "⌛ Teleport To World",
 	Callback = function()
         InstantTeleportToLayer()
 	end,
 })
-local FPSSection = MiscTab:CreateSection("FPS Settings (Synapse Required)")
+
+
+
+-- Fps Settings
+local FPSSection = MiscTab:CreateSection("🪟 FPS Settings (Synapse Required) 🪟")
 local AutoFPSParagraph = MiscTab:CreateParagraph({
     Title = "Current FPS Settings", 
-    Content = "Current FPS: " .. _G.SettingsTable.FPSSettings
+    Content = "🖼️⚙️ Current FPS: " .. _G.SettingsTable.FPSSettings
 })
 local ChooseFPSValue = MiscTab:CreateInput({
-	Name = "Choose FPS Value:",
+	Name = "🖼️📝 Choose FPS Value:",
 	PlaceholderText = "Default = 60",
 	RemoveTextAfterFocusLost = false,
 	Callback = function(FPStxt)
@@ -1861,16 +1924,18 @@ local ChooseFPSValue = MiscTab:CreateInput({
 	end,
 })
 local SetFPSValues = MiscTab:CreateButton({
-	Name = "Set FPS Value",
+	Name = "🖼️🖱️ Set FPS Value",
 	Callback = function()
         SetFPSValue()
 	end,
 })
 
+
+
 -- Remote UIs
-local RemoteUIsSection = MiscTab:CreateSection("Remote UI's (X buttons dont work)")
+local RemoteUIsSection = MiscTab:CreateSection("📃 Remote UI's (X buttons dont work) 📃")
 local PetEnchantsUI = MiscTab:CreateToggle({
-	Name = "Pet Enchantments",
+	Name = "🔮 Pet Enchantments",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1878,7 +1943,7 @@ local PetEnchantsUI = MiscTab:CreateToggle({
 	end,
 })
 local RebirthShopUI = MiscTab:CreateToggle({
-	Name = "Rebirth Shop",
+	Name = "💖 Rebirth Shop",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1886,7 +1951,7 @@ local RebirthShopUI = MiscTab:CreateToggle({
 	end,
 })
 local ForgeUI = MiscTab:CreateToggle({
-	Name = "Forge",
+	Name = "⚒️ Forge",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1894,7 +1959,7 @@ local ForgeUI = MiscTab:CreateToggle({
 	end,
 })
 local AutoDeleteUI = MiscTab:CreateToggle({
-	Name = "Auto Delete",
+	Name = "❌ Auto Delete",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1902,7 +1967,7 @@ local AutoDeleteUI = MiscTab:CreateToggle({
 	end,
 })
 local GemEnchantsUI = MiscTab:CreateToggle({
-	Name = "Gem Enchantments",
+	Name = "💎 Gem Enchantments",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1910,7 +1975,7 @@ local GemEnchantsUI = MiscTab:CreateToggle({
 	end,
 })
 local AchievementsUI = MiscTab:CreateToggle({
-	Name = "Achievements",
+	Name = "⭐ Achievements",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1918,7 +1983,7 @@ local AchievementsUI = MiscTab:CreateToggle({
 	end,
 })
 local FactoryUI = MiscTab:CreateToggle({
-	Name = "Factory",
+	Name = "🏭 Factory",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1926,7 +1991,7 @@ local FactoryUI = MiscTab:CreateToggle({
 	end,
 })
 local QuestsUI = MiscTab:CreateToggle({
-	Name = "Gem Genie Quests",
+	Name = "🧞 Gem Genie Quests",
 	CurrentValue = false,
 	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(bool)
@@ -1934,8 +1999,9 @@ local QuestsUI = MiscTab:CreateToggle({
 	end,
 })
 
--- Other Gui's 
--- Tense UI
+
+
+-- Pet Hatcher
 local NotMyGUISection = OtherUITab:CreateSection("I do NOT OWN these GUIS! Credits to the devs")
 local CorsGUISection = OtherUITab:CreateSection("Tense's OP GUI")
 local TensesOPGUIFeatures = OtherUITab:CreateDropdown({
@@ -1975,7 +2041,7 @@ local ActivateExodusScript = OtherUITab:CreateButton({
 -- Help Section
 local DiscordlinkSection = HelpTab:CreateSection("Need help with the GUI? Join the Discord for help!")
 local DiscordlinkInvite = HelpTab:CreateButton({
-	Name = "Discord Invite",
+	Name = "💌 Discord Invite",
 	Callback = function()
         (syn and syn.request or http_request or request)({ Url = "http://127.0.0.1:6463/rpc?v=1",
         Method = "POST",Headers = {["Content-Type"] = "application/json",
@@ -1987,7 +2053,7 @@ local DiscordlinkInvite = HelpTab:CreateButton({
 })
 local SaveSettingsSection = HelpTab:CreateSection("Settings that are saveable")
 local Settingsthataresaveable = HelpTab:CreateDropdown({
-	Name = "Settings:",
+	Name = "⚙️ Settings:",
 	Options = {"Craft Option", "Auto Factory Craft", "Auto Collect Group Rewards", "Auto Buy Shop Boosts", "Choose Egg: (Hatching)", "Quad/Multi Hatch", "Start Hatching Egg", "Skip Animation", "Disable Skip Animation", "Choose Egg: (Teleport)", "Select World (Egg Teleport)", "Teleport To Egg"},
 	CurrentOption = "Settings that will be saved",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -1996,7 +2062,7 @@ local Settingsthataresaveable = HelpTab:CreateDropdown({
 })
 local NoSaveSettingsSection = HelpTab:CreateSection("Settings that are not saveable")
 local Settingsthataresaveable = HelpTab:CreateDropdown({
-	Name = "Settings:",
+	Name = "⚙️ Settings:",
 	Options = {"All Other GUI's", "Select Layer (Teleport/Unlock)","Teleport To Layer","Unlock Layer", "Select World (Instant TP)", "Teleport to world"},
 	CurrentOption = "Settings that will not be saved",
 	Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -2009,6 +2075,7 @@ local TextBoxHelpSection = HelpTab:CreateSection("Tip: Press the ENTER key after
 
 -- Load Settings
 function LoadSettingsTableSettings()
+    spawn(function ()
         local HttpService = game:GetService("HttpService")
         if (readfile and isfile and isfile(SettingsTableName)) then
             _G.SettingsTable = HttpService:JSONDecode(readfile(SettingsTableName))
@@ -2052,7 +2119,8 @@ function LoadSettingsTableSettings()
                 }
                 )
             end
-    end
+        end
+    end)
 end
 
 LoadSettingsTableSettings()
@@ -2126,9 +2194,9 @@ end
 
 
 -- Setting Stuff
-local SettingsSection = SettingsTab:CreateSection("Setting Options (Settings Save Per Account)")
+local SettingsSection = SettingsTab:CreateSection("⚙️ Setting Options (Settings Save Per Account) ⚙️")
 local SeeCurrentSettings = SettingsTab:CreateButton({
-	Name = "See Your Current Settings (Type /console in chat)",
+	Name = "⚙️ See Your Current Settings (Type /console in chat)",
 	Callback = function()
         print("---CURRENT SETTINGS---")
         for i,v in pairs(_G.SettingsTable) do
@@ -2138,13 +2206,13 @@ local SeeCurrentSettings = SettingsTab:CreateButton({
 	end,
 })
 local SaveCurrentSettings = SettingsTab:CreateButton({
-	Name = "Save Your Current Settings",
+	Name = "⚙️⬇️ Save Your Current Settings",
 	Callback = function()
         SaveSettingsTableSettings()
 	end,
 })
 local LoadSavedSettings = SettingsTab:CreateButton({
-	Name = "Load Your Saved Settings",
+	Name = "⚙️⬆️ Load Your Saved Settings",
 	Callback = function()
         LoadSettingsTableSettings()
 	end,
@@ -2154,7 +2222,6 @@ local LoadSavedSettings = SettingsTab:CreateButton({
 
 -- End Loop to update Textboxes
 while wait() do
-    local plr = game.Players.LocalPlayer
     local count = 0
     count = game:GetService("Players")[username].leaderstats.Eggs.Value
     local CoinsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Coins.Label.text
@@ -2164,15 +2231,16 @@ while wait() do
     local BricksCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Bricks.Label.text
     local CrystalCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Crystals.Label.text
     local StarsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Stars.Label.text
-    CurrencyParagraph:Set({Title = "All World Currency Counts", Content = "Coins: " .. FormatCurrency(CoinsCount) .. "\nCyber Tokens: " .. FormatCurrency(SpaceCoinsCount) .. "\nShells: " .. FormatCurrency(ShellsCount) .. "\nCandy: " .. FormatCurrency(CandyCount) .. "\nBricks: " .. FormatCurrency(BricksCount) .. "\nCrystals: " .. FormatCurrency(CrystalCount) .. "\nStars: " .. FormatCurrency(StarsCount)})
-    AutoFactoryCraftParagraph:Set({Title = "Current Factory Settings", Content = "Craft Option: " .. _G.SettingsTable.GemType .. "\nActivated: " .. _G.PlaceHolders.AutoFactoryCraftPlaceHolder})
-    AutoGroupRewardsParagraph:Set({Title = "Current Auto Collect Settings", Content = "Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder .. "\nAuto Collect Event Boosts: " .. _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder})
-    AutoBuyBoostsParagraph:Set({Title = "Current Auto Buy Boosts Settings", Content = "Auto Buy Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyLucky1HourPlaceHolder .. "\nAuto Buy Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyLucky2HourPlaceHolder .. "\nAuto Buy Super Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuySuperLucky1HourPlaceHolder .. "\nAuto Buy Super Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuySuperLucky2HourPlaceHolder .. "\nAuto Buy Omega Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyOmegaLucky1HourPlaceHolder .. "\nAuto Buy Omega Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyOmegaLucky2HourPlaceHolder})
-    EggFarmingParagraph:Set({Title = "Current Egg Settings", Content = "Eggs Hatched: " .. abb(count) .. "\nSecrets Hatched: " .. abb(_G.SecretsList.TotalSecretsHatched) .. "\nCurrent Egg: " .. _G.SettingsTable.EggType .. "\nMulti/Quad Hatch: " .. _G.PlaceHolders.MultiHatchPlaceHolder .. "\nSkip Animation: " .. _G.PlaceHolders.SkipAnimationPlaceHolder .. "\nAuto Hatch Egg: " .. _G.PlaceHolders.AutoHatchEggPlaceHolder .. "\nEggs Left: " .. abb(GetEggsLeft())})
-    AutoTeleportParagraph:Set({Title = "Current Auto Teleport Settings", Content = "Current Egg: " .. _G.SettingsTable.EggTP .. "\nCurrent World: " .. _G.SettingsTable.WorldOption .. "\nActivated: " .. _G.PlaceHolders.AutoTeleportToEggPlaceHolder })
-    AutoFPSParagraph:Set({Title = "Current FPS Settings", Content = "Current FPS: " .. _G.SettingsTable.FPSSettings})
-    StatsTrackerParagraph:Set({Title = "Current Stats Tracker Settings", Content = "Time Between Updates (In Seconds): " .. _G.PlaceHolders.IntervalsPlaceHolder .. "\nEmbed Color (Hex Value): " .. _G.PlaceHolders.ColorPlaceHolder .. "\nEgg Count: " .. _G.PlaceHolders.EggCountTrackerPlaceHolder .. "\nRebirth Count: " .. _G.PlaceHolders.RebirthCountTrackerPlaceHolder .. "\nBlocks Count " .. _G.PlaceHolders.BlockCountTrackerPlaceHolder .. "\nActivated: " .. _G.PlaceHolders.StatsTrackerActivationPlaceHolder})
-    WebhookParagraph:Set({Title = "Webhook Data", Content = "Webhook: " .. _G.PlaceHolders.WebhookPlaceHolder .. "\nWebhook Paragraph Error (Dev Issue): " .. _G.PlaceHolders.WebhookErrorPlaceHolder})
-    EggBackupParagraph:Set({Title = "Current Egg Backup Settings", Content = "Info: Teleports to a backup egg if under 100 eggs left on main egg \nBackup Egg: " .. _G.SettingsTable.BackupEggType .. "\nBackup World: " .. _G.SettingsTable.BackupWorldOption .. "\nActivated: " .. _G.PlaceHolders.EnableBackupPlaceHolder .. "\nBackup Active: " .. _G.PlaceHolders.BackupActive})
+    CurrencyParagraph:Set({Title = "All World Currency Counts", Content = "💰 Coins: " .. FormatCurrency(CoinsCount) .. "\n🚀 Cyber Tokens: " .. FormatCurrency(SpaceCoinsCount) .. "\n🐚 Shells: " .. FormatCurrency(ShellsCount) .. "\n🍬 Candy: " .. FormatCurrency(CandyCount) .. "\n🧱 Bricks: " .. FormatCurrency(BricksCount) .. "\n🔮 Crystals: " .. FormatCurrency(CrystalCount) .. "\n✨ Stars: " .. FormatCurrency(StarsCount)})
+    AutoFactoryCraftParagraph:Set({Title = "Current Factory Settings", Content = "🔨 Craft Option: " .. _G.SettingsTable.GemType .. "\n🖱️ Activated: " .. _G.PlaceHolders.AutoFactoryCraftPlaceHolder})
+    AutoGroupRewardsParagraph:Set({Title = "Current Auto Collect Settings", Content = "🎁 Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder .. "\n🐰 Auto Collect Event Boosts: " .. _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder})
+    AutoBuyBoostsParagraph:Set({Title = "Current Auto Buy Boosts Settings", Content = "🍀 Auto Buy Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyLucky1HourPlaceHolder .. "\n🍀 Auto Buy Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyLucky2HourPlaceHolder .. "\n🌟🍀 Auto Buy Super Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuySuperLucky1HourPlaceHolder .. "\n🌟🍀 Auto Buy Super Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuySuperLucky2HourPlaceHolder .. "\n🔮🍀 Auto Buy Omega Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyOmegaLucky1HourPlaceHolder .. "\n🔮🍀 Auto Buy Omega Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyOmegaLucky2HourPlaceHolder})
+    EggFarmingParagraph:Set({Title = "Current Egg Settings", Content = "🐣 Current Egg: " .. _G.SettingsTable.EggType .. "\n✖️ Multi/Quad Hatch: " .. _G.PlaceHolders.MultiHatchPlaceHolder .. "\n⏭️ Skip Animation: " .. _G.PlaceHolders.SkipAnimationPlaceHolder .. "\n🔃 Auto Hatch Egg: " .. _G.PlaceHolders.AutoHatchEggPlaceHolder}) 
+    EggStatsParagraph:Set({Title = "Egg Stats", Content = "🥚 Eggs Hatched: " .. abb(count) .. "\n🤫 Secrets Hatched: " .. abb(_G.SecretsList.TotalSecretsHatched) .. "\n🥚 Eggs Left: " .. abb(GetEggsLeft()) .. "\n⏱️ Time Left: " .. GetTimeLeft() .. "\n🥚⏱️ Eggs Per Hour: " .. abb(EggsHatchedPerHour) .. "\n🥚⏱️ Eggs Per Day: " .. abb(EggsHatchedPerDay)})
+    AutoTeleportParagraph:Set({Title = "Current Auto Teleport Settings", Content = "🐣 Current Egg: " .. _G.SettingsTable.EggTP .. "\n🏝️ Current World: " .. _G.SettingsTable.WorldOption .. "\n🖱️ Activated: " .. _G.PlaceHolders.AutoTeleportToEggPlaceHolder })
+    AutoFPSParagraph:Set({Title = "Current FPS Settings", Content = "🖼️⚙️ Current FPS: " .. _G.SettingsTable.FPSSettings})
+    StatsTrackerParagraph:Set({Title = "Current Stats Tracker Settings", Content = "⌛ Time Between Updates (In Seconds): " .. _G.PlaceHolders.IntervalsPlaceHolder .. "\n🌈 Embed Color (Hex Value): " .. _G.PlaceHolders.ColorPlaceHolder .. "\n🥚 Egg Count: " .. _G.PlaceHolders.EggCountTrackerPlaceHolder .. "\n💖 Rebirth Count: " .. _G.PlaceHolders.RebirthCountTrackerPlaceHolder .. "\n⛏️ Blocks Count " .. _G.PlaceHolders.BlockCountTrackerPlaceHolder .. "\n🖱️ Activated: " .. _G.PlaceHolders.StatsTrackerActivationPlaceHolder})
+    WebhookParagraph:Set({Title = "Webhook Data", Content = "📜 Webhook: " .. _G.PlaceHolders.WebhookPlaceHolder})
+    EggBackupParagraph:Set({Title = "Current Egg Backup Settings", Content = "Info: Teleports to a backup egg if under 100 eggs left on main egg \n🐣 Backup Egg: " .. _G.SettingsTable.BackupEggType .. "\n🏝️ Backup World: " .. _G.SettingsTable.BackupWorldOption .. "\n🖱️ Activated: " .. _G.PlaceHolders.EnableBackupPlaceHolder .. "\n⌛ Backup Active: " .. _G.PlaceHolders.BackupActive})
 end
 Rayfield:LoadConfiguration()
