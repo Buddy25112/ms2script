@@ -2106,6 +2106,60 @@ function LoadSettingsTableSettings()
             Duration = 5
             }
             )
+		-- Setting Checkers/Function Checkers
+		if _G.SettingsTable.TpToEgg then
+		    TweenToEgg()
+		    _G.PlaceHolders.AutoTeleportToEggPlaceHolder = "Yes"
+		end
+		if _G.SettingsTable.SkipAnimation then
+		    SkipAnimation1()
+		    _G.PlaceHolders.SkipAnimationPlaceHolder = "Activated"
+		end
+		if _G.SettingsTable.StatsTrackerActivated then
+		    _G.PlaceHolders.StatsTrackerActivationPlaceHolder = "Yes"
+		    ActivateStatsTracker()
+		end
+
+
+
+		-- Nil Value Checkers (if you are running old settings)
+		if _G.SettingsTable.Intervals == nil or _G.SettingsTable.Webhookssss == nil or _G.SettingsTable.Color == nil then
+		    _G.PlaceHolders.WebhookErrorPlaceHolder = "Yes"
+		else
+		    _G.PlaceHolders.IntervalsPlaceHolder = _G.SettingsTable.Intervals
+		    _G.PlaceHolders.WebhookPlaceHolder = _G.SettingsTable.Webhookssss
+		    _G.PlaceHolders.ColorPlaceHolder = _G.SettingsTable.Color
+		end
+		if _G.SettingsTable.GemType == nil then
+		    _G.SettingsTable.GemType = "None"
+		end
+		if _G.SettingsTable.InstantWorldOption == nil then
+		    _G.SettingsTable.InstantWorldOption = "None"
+		end
+		if _G.SettingsTable.LayerOption == nil then
+		    _G.SettingsTable.LayerOption = "None"
+		end
+		if _G.SettingsTable.WorldOption == nil then
+		    _G.SettingsTable.WorldOption = "None"
+		end
+		if _G.SettingsTable.EggType == nil then
+		    _G.SettingsTable.EggType = "None"
+		end
+		if _G.SettingsTable.EggTP == nil then
+		    _G.SettingsTable.EggTP = "None"
+		end
+		if _G.SettingsTable.BackupEggTP == nil then
+		    _G.SettingsTable.BackupEggTP = "None"
+		end
+		if _G.SettingsTable.BackupEggType == nil then
+		    _G.SettingsTable.BackupEggType = "None"
+		end
+		if _G.SettingsTable.BackupWorldOption == nil then
+		    _G.SettingsTable.BackupWorldOption = "None"
+		end
+		if _G.SettingsTable.FPSSettings == nil then
+		    _G.SettingsTable.FPSSettings = "60"
+		end
         else
             if not isfile(SettingsTableName) then
                 print("Settings: None Found")
@@ -2131,63 +2185,6 @@ function SkipAnimation1()
     spawn(function()
         game.ReplicatedStorage.ClientModules.Other.OpenEgg.HatchGui:Destroy()
     end)
-end
-
-
-
--- Setting Checkers/Function Checkers
-if _G.SettingsTable.TpToEgg then
-    TweenToEgg()
-    _G.PlaceHolders.AutoTeleportToEggPlaceHolder = "Yes"
-end
-if _G.SettingsTable.SkipAnimation then
-    SkipAnimation1()
-    _G.PlaceHolders.SkipAnimationPlaceHolder = "Activated"
-end
-if _G.SettingsTable.StatsTrackerActivated then
-    _G.PlaceHolders.StatsTrackerActivationPlaceHolder = "Yes"
-    ActivateStatsTracker()
-end
-
-
-
--- Nil Value Checkers (if you are running old settings)
-if _G.SettingsTable.Intervals == nil or _G.SettingsTable.Webhookssss == nil or _G.SettingsTable.Color == nil then
-    _G.PlaceHolders.WebhookErrorPlaceHolder = "Yes"
-else
-    _G.PlaceHolders.IntervalsPlaceHolder = _G.SettingsTable.Intervals
-    _G.PlaceHolders.WebhookPlaceHolder = _G.SettingsTable.Webhookssss
-    _G.PlaceHolders.ColorPlaceHolder = _G.SettingsTable.Color
-end
-if _G.SettingsTable.GemType == nil then
-    _G.SettingsTable.GemType = "None"
-end
-if _G.SettingsTable.InstantWorldOption == nil then
-    _G.SettingsTable.InstantWorldOption = "None"
-end
-if _G.SettingsTable.LayerOption == nil then
-    _G.SettingsTable.LayerOption = "None"
-end
-if _G.SettingsTable.WorldOption == nil then
-    _G.SettingsTable.WorldOption = "None"
-end
-if _G.SettingsTable.EggType == nil then
-    _G.SettingsTable.EggType = "None"
-end
-if _G.SettingsTable.EggTP == nil then
-    _G.SettingsTable.EggTP = "None"
-end
-if _G.SettingsTable.BackupEggTP == nil then
-    _G.SettingsTable.BackupEggTP = "None"
-end
-if _G.SettingsTable.BackupEggType == nil then
-    _G.SettingsTable.BackupEggType = "None"
-end
-if _G.SettingsTable.BackupWorldOption == nil then
-    _G.SettingsTable.BackupWorldOption = "None"
-end
-if _G.SettingsTable.FPSSettings == nil then
-    _G.SettingsTable.FPSSettings = "60"
 end
 
 
