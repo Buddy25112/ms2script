@@ -221,6 +221,8 @@ function GetEggsLeft(Value)
         EggsLeft = DataFlowerCount / 900000000
     elseif _G.SettingsTable.EggType == "Aquatic Egg" then
         EggsLeft = DataFlowerCount / 1500000000
+    elseif _G.SettingsTable.EggType == "Anniversary Egg" then
+	EggsLeft = DataCoinsCount / 10000000000
     else 
         EggsLeft = "Invalid Input or Not Updated"
     end
