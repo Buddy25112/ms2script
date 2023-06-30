@@ -89,7 +89,7 @@ local EggsHatchedPerDay = 0
 
 -- Update Locals
 local FactorySettings = {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5", "Bricks 1", "Bricks 2", "Bricks 3", "Bricks 4", "Bricks 5", "Crystals 1", "Crystals 2", "Crystals 3", "Crystals 4", "Crystals 5", "Stars 1", "Stars 2", "Stars 3", "Stars 4", "Stars 5", "Pearls 1", "Pearls 2", "Pearls 3", "Pearls 4", "Pearls 5"}
-local EggSettings = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Coconut Egg", "Crab Egg", "Tropical Egg", "Sandcastle Egg", "Aquatic Egg", "Floaty Egg", "Magician Egg", "Turquoise Egg"}
+local EggSettings = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Coconut Egg", "Crab Egg", "Tropical Egg", "Sandcastle Egg", "Aquatic Egg", "Floaty Egg", "Magician Egg", "Turquoise Egg", "Patriot Egg"}
 local WorldSettings = {"Surface", "The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Mystic Forest", "Rainbow Land", "Tropical Land", "Summer Carnival"}
 local LayerSettings = {"Hidden Treasure", "Frozen Depths", "Gloomy Basin", "Molten Core", "The Underworld", "Crystal Cavern", "Cyber Sewers", "Cosmic Abyss", "Cyber Core", "Glitched Chasm", "Rocky Depths", "Sea Shell Shallows", "City of Gold", "Dark Coral Depths", "Chocolate Caves", "Gummy Depths", "Cupcake Cavern", "Donut Depths", "Blocky Basin", "Bear Depths", "Building Depths", "Pixel Park", "Glowing Depths", "Neon Rocks", "Mystic Cavern", "Magenta Forest", "Rainbow Depths", "Violet Forest", "Palm Cavern", "Sand Caverns", "Tropical Depths"}
 local TpWorldSettings = {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "GemGenie", "Mystic Forest", "Rainbow Land", "Tropical Land", "Summer Carnival"}
@@ -228,6 +228,8 @@ function GetEggsLeft(Value)
 	EggsLeft = DataTokenCount / 100000000
     elseif _G.SettingsTable.EggType == "Turquoise Egg" then
 	EggsLeft = DataTokenCount / 300000000
+    elseif _G.SettingsTable.EggType == "Patriot Egg" then
+	EggsLeft = DataTokenCount / 15000000000
     else 
         EggsLeft = "Invalid Input or Not Updated"
     end
@@ -1274,7 +1276,7 @@ end)
 -- Beginning of UI
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/Buddy25112/OtherThings/main/RayfieldNotBroken.lua'))()
 local Window = Rayfield:CreateWindow({
-	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.3.2",
+	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.3.3",
 	LoadingTitle = "Mining Simulator 2 GUI",
 	LoadingSubtitle = "By PetSimulatorXPlayer",
 
@@ -1291,8 +1293,8 @@ local CreditsSection2 = CreditsTab:CreateSection("Helper: Cor#0002")
 local CreditsSection3 = CreditsTab:CreateSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection4 = CreditsTab:CreateSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:CreateSection("--------------------------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-06-29")
-local CreditsSection7 = CreditsTab:CreateSection("Last Update: Added Summer Carnival Settings")
+local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-06-30")
+local CreditsSection7 = CreditsTab:CreateSection("Last Update: Added Patriot Settings")
 local CreditsSection8 = CreditsTab:CreateSection("Upcoming Update: Pet Hatcher")
 local CreditsSection9 = CreditsTab:CreateSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:CreateSection("-------------------------------------------------------------------------------------")
@@ -1358,7 +1360,7 @@ local AutoFactoryCraft = AutoFarmTab:CreateToggle({
 local AutoGroupRewardsSection = AutoFarmTab:CreateSection("📮 Auto Collect Features 📮")
 local AutoGroupRewardsParagraph = AutoFarmTab:CreateParagraph({
     Title = "Current Auto Collect Settings", 
-    Content = "🎁 Auto Collect Group Rewards: \n🐰 Auto Collect Event Boosts: "
+    Content = "🎁 Auto Collect Group Rewards: \n🐰 Auto Collect Event Boosts: \n📮 Auto Collect Spins: \n 💰 Auto Buy Spins: \n 🎰 Auto Spin Wheel:"
 })
 local AutoCollectGroupRewards = AutoFarmTab:CreateToggle({
 	Name = "🎁 Auto Collect Group Rewards",
@@ -1374,48 +1376,48 @@ local AutoCollectGroupRewards = AutoFarmTab:CreateToggle({
         end
 	end,
 })
---local AutoCollectSpins = AutoFarmTab:CreateToggle({
---	Name = "Auto Collect Spins",
---	CurrentValue = false,
---	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
---	Callback = function(bool)
---        _G.SettingsTable.AutoCollectSpins = bool
---        if bool then
---            AutoCollectSpins()
---            _G.PlaceHolders.AutoCollectSpinsPlaceHolder = "Activated"
---        else
---            _G.PlaceHolders.AutoCollectSpinsPlaceHolder = "Deactivated"
---        end
---	end,
---})
---local AutoBuySpins = AutoFarmTab:CreateToggle({
---	Name = "Auto Buy Spins",
---	CurrentValue = false,
---	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
---	Callback = function(bool)
---       _G.SettingsTable.AutoBuySpins = bool
---        if bool then
---            AutoBuySpins()
---            _G.PlaceHolders.AutoBuySpinsPlaceHolder = "Activated"
---        else
---            _G.PlaceHolders.AutoBuySpinsPlaceHolder = "Deactivated"
---        end
---	end,
---})
---local AutoSpinWheel = AutoFarmTab:CreateToggle({
---	Name = "Auto Spin Wheel",
---	CurrentValue = false,
---	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
---	Callback = function(bool)
---        _G.SettingsTable.AutoSpinWheel = bool
---        if bool then
---            AutoSpinWheel()
---            _G.PlaceHolders.AutoSpinWheelPlaceHolder = "Activated"
---        else
---            _G.PlaceHolders.AutoSpinWheelPlaceHolder = "Deactivated"
---        end
---	end,
---})
+local AutoCollectSpins = AutoFarmTab:CreateToggle({
+	Name = "📮 Auto Collect Spins",
+	CurrentValue = false,
+	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(bool)
+        _G.SettingsTable.AutoCollectSpins = bool
+        if bool then
+            AutoCollectSpins()
+            _G.PlaceHolders.AutoCollectSpinsPlaceHolder = "Activated"
+        else
+            _G.PlaceHolders.AutoCollectSpinsPlaceHolder = "Deactivated"
+        end
+	end,
+})
+local AutoBuySpins = AutoFarmTab:CreateToggle({
+	Name = "💰 Auto Buy Spins",
+	CurrentValue = false,
+	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(bool)
+       _G.SettingsTable.AutoBuySpins = bool
+        if bool then
+            AutoBuySpins()
+            _G.PlaceHolders.AutoBuySpinsPlaceHolder = "Activated"
+        else
+            _G.PlaceHolders.AutoBuySpinsPlaceHolder = "Deactivated"
+        end
+	end,
+})
+local AutoSpinWheel = AutoFarmTab:CreateToggle({
+	Name = "🎰 Auto Spin Wheel",
+	CurrentValue = false,
+	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(bool)
+        _G.SettingsTable.AutoSpinWheel = bool
+        if bool then
+            AutoSpinWheel()
+            _G.PlaceHolders.AutoSpinWheelPlaceHolder = "Activated"
+        else
+            _G.PlaceHolders.AutoSpinWheelPlaceHolder = "Deactivated"
+        end
+	end,
+})
  local AutoBuyChristmasBoosts = AutoFarmTab:CreateToggle({
  	Name = "🎪 Auto Buy Event Boosts",
  	CurrentValue = false,
@@ -2233,7 +2235,7 @@ while wait() do
     local PearlsCount = game:GetService("Players").LocalPlayer.PlayerGui.ScreenGui.HUD.Left.Pearls.Label.text
     CurrencyParagraph:Set({Title = "All World Currency Counts", Content = "💰 Coins: " .. FormatCurrency(CoinsCount) .. "\n🚀 Cyber Tokens: " .. FormatCurrency(SpaceCoinsCount) .. "\n🐚 Shells: " .. FormatCurrency(ShellsCount) .. "\n🍬 Candy: " .. FormatCurrency(CandyCount) .. "\n🧱 Bricks: " .. FormatCurrency(BricksCount) .. "\n🔮 Crystals: " .. FormatCurrency(CrystalCount) .. "\n✨ Stars: " .. FormatCurrency(StarsCount) .. "\n🦪 Pearls: " .. FormatCurrency(PearlsCount)})
     AutoFactoryCraftParagraph:Set({Title = "Current Factory Settings", Content = "🔨 Craft Option: " .. _G.SettingsTable.GemType .. "\n🖱️ Activated: " .. _G.PlaceHolders.AutoFactoryCraftPlaceHolder})
-    AutoGroupRewardsParagraph:Set({Title = "Current Auto Collect Settings", Content = "🎁 Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder .. "\n🐰 Auto Collect Event Boosts: " .. _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder})
+    AutoGroupRewardsParagraph:Set({Title = "Current Auto Collect Settings", Content = "🎁 Auto Collect Group Rewards: " .. _G.PlaceHolders.AutoCollectGroupRewardsPlaceHolder .. "\n🐰 Auto Collect Event Boosts: " .. _G.PlaceHolders.AutoBuyEventBoostsPlaceHolder .. "\n📮 Auto Collect Spins: " .. _G.Placeholders.AutoCollectSpinsPlaceHolder .. "\n💰 Auto Buy Spins: " .. _G.Placeholders.AutoBuySpinsPlaceHolder .. "\n🎰 Auto Spin Wheel: " .. _G.Placeholders.AutoSpinWheelPlaceHolder})
     AutoBuyBoostsParagraph:Set({Title = "Current Auto Buy Boosts Settings", Content = "🍀 Auto Buy Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyLucky1HourPlaceHolder .. "\n🍀 Auto Buy Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyLucky2HourPlaceHolder .. "\n🌟🍀 Auto Buy Super Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuySuperLucky1HourPlaceHolder .. "\n🌟🍀 Auto Buy Super Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuySuperLucky2HourPlaceHolder .. "\n🔮🍀 Auto Buy Omega Lucky Boost (1 Hour): " .. _G.PlaceHolders.BuyOmegaLucky1HourPlaceHolder .. "\n🔮🍀 Auto Buy Omega Lucky Boost (2 Hours): " .. _G.PlaceHolders.BuyOmegaLucky2HourPlaceHolder})
     EggFarmingParagraph:Set({Title = "Current Egg Settings", Content = "🐣 Current Egg: " .. _G.SettingsTable.EggType .. "\n✖️ Multi/Quad Hatch: " .. _G.PlaceHolders.MultiHatchPlaceHolder .. "\n⏭️ Skip Animation: " .. _G.PlaceHolders.SkipAnimationPlaceHolder .. "\n🔃 Auto Hatch Egg: " .. _G.PlaceHolders.AutoHatchEggPlaceHolder}) 
     EggStatsParagraph:Set({Title = "Egg Stats", Content = "🥚 Eggs Hatched: " .. abb(count) .. "\n🤫 Secrets Hatched: " .. abb(_G.SecretsList.TotalSecretsHatched) .. "\n🥚 Eggs Left: " .. abb(GetEggsLeft()) .. "\n⏱️ Time Left: " .. GetTimeLeft() .. "\n🥚⏱️ Eggs Per Hour: " .. abb(EggsHatchedPerHour) .. "\n🥚⏱️ Eggs Per Day: " .. abb(EggsHatchedPerDay)})
