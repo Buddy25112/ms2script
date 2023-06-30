@@ -89,10 +89,10 @@ local EggsHatchedPerDay = 0
 
 -- Update Locals
 local FactorySettings = {"Coins 1", "Coins 2", "Coins 3", "Coins 4", "CyberTokens 1", "CyberTokens 2", "CyberTokens 3", "CyberTokens 4", "Shells 1", "Shells 2", "Shells 3", "Shells 4", "Shells 5", "Candy 1", "Candy 2", "Candy 3", "Candy 4", "Candy 5", "Bricks 1", "Bricks 2", "Bricks 3", "Bricks 4", "Bricks 5", "Crystals 1", "Crystals 2", "Crystals 3", "Crystals 4", "Crystals 5", "Stars 1", "Stars 2", "Stars 3", "Stars 4", "Stars 5", "Pearls 1", "Pearls 2", "Pearls 3", "Pearls 4", "Pearls 5"}
-local EggSettings = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Coconut Egg", "Crab Egg", "Tropical Egg", "Sandcastle Egg", "Aquatic Egg", "Anniversary Egg"}
-local WorldSettings = {"Surface", "The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Mystic Forest", "Rainbow Land", "Tropical Land"}
+local EggSettings = {"Basic Egg", "Spotted Egg", "Forest Egg", "Exotic Egg", "Arctic Egg", "Ice Egg", "Dark Egg", "Volcanic Egg", "Underworld Egg", "Crystal Egg", "Space Egg", "Slime Egg", "Nebula Egg", "Cyborg Egg", "Glitched Egg", "Holographic Egg", "Coral Egg", "Snorkel Egg", "Dark Coral Egg", "Atlantis Egg", "Gumdrop Egg", "Cake Egg", "Candy Egg", "Chocolate Egg", "Pastry Egg", "WindUp Egg", "Brick Egg", "Toy Egg", "Pixel Egg", "Cartoon Egg", "Mossy Egg", "Mushroom Egg", "Element Egg", "Red Egg", "Yellow Egg", "Fancy Egg", "Comet Egg", "Coconut Egg", "Crab Egg", "Tropical Egg", "Sandcastle Egg", "Aquatic Egg", "Floaty Egg", "Magician Egg", "Turquoise Egg"}
+local WorldSettings = {"Surface", "The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "Mystic Forest", "Rainbow Land", "Tropical Land", "Summer Carnival"}
 local LayerSettings = {"Hidden Treasure", "Frozen Depths", "Gloomy Basin", "Molten Core", "The Underworld", "Crystal Cavern", "Cyber Sewers", "Cosmic Abyss", "Cyber Core", "Glitched Chasm", "Rocky Depths", "Sea Shell Shallows", "City of Gold", "Dark Coral Depths", "Chocolate Caves", "Gummy Depths", "Cupcake Cavern", "Donut Depths", "Blocky Basin", "Bear Depths", "Building Depths", "Pixel Park", "Glowing Depths", "Neon Rocks", "Mystic Cavern", "Magenta Forest", "Rainbow Depths", "Violet Forest", "Palm Cavern", "Sand Caverns", "Tropical Depths"}
-local TpWorldSettings = {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "GemGenie", "Mystic Forest", "Rainbow Land", "Tropical Land"}
+local TpWorldSettings = {"The Overworld", "Cyber Galaxy", "Atlantis", "Candyland", "Toyland", "GemGenie", "Mystic Forest", "Rainbow Land", "Tropical Land", "Summer Carnival"}
 
 -- Spawn Functions
 spawn(function()
@@ -136,6 +136,7 @@ function GetEggsLeft(Value)
     local DataGemsCount = GetLocalData:GetData("Gems")
     local DataStarsCount = GetLocalData:GetData("Stars")
     local DataFlowerCount = GetLocalData:GetData("Pearls")
+    local DataTokenCount = GetLocalData:GetData("Tokens")
     local EggsLeft
     if _G.SettingsTable.EggType == "Basic Egg" then
         EggsLeft = DataCoinsCount / 55
@@ -221,8 +222,12 @@ function GetEggsLeft(Value)
         EggsLeft = DataFlowerCount / 900000000
     elseif _G.SettingsTable.EggType == "Aquatic Egg" then
         EggsLeft = DataFlowerCount / 1500000000
-    elseif _G.SettingsTable.EggType == "Anniversary Egg" then
-	EggsLeft = DataCoinsCount / 10000000000
+    elseif _G.SettingsTable.EggType == "Floaty Egg" then
+	EggsLeft = DataTokenCount / 20000000
+    elseif _G.SettingsTable.EggType == "Magician Egg" then
+	EggsLeft = DataTokenCount / 100000000
+    elseif _G.SettingsTable.EggType == "Turquoise Egg" then
+	EggsLeft = DataTokenCount / 300000000
     else 
         EggsLeft = "Invalid Input or Not Updated"
     end
@@ -1269,7 +1274,7 @@ end)
 -- Beginning of UI
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/Buddy25112/OtherThings/main/RayfieldNotBroken.lua'))()
 local Window = Rayfield:CreateWindow({
-	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.3.1",
+	Name = "Hatchers Hub | Mining Simulator 2 | Version 1.3.2",
 	LoadingTitle = "Mining Simulator 2 GUI",
 	LoadingSubtitle = "By PetSimulatorXPlayer",
 
@@ -1286,8 +1291,8 @@ local CreditsSection2 = CreditsTab:CreateSection("Helper: Cor#0002")
 local CreditsSection3 = CreditsTab:CreateSection("Helper: wYn#0001 (Youtube Guides)")
 local CreditsSection4 = CreditsTab:CreateSection("⚠️ Saved Settings Will Auto Load When Executed ⚠️")
 local CreditsSection5 = CreditsTab:CreateSection("--------------------------------------------------------------------------------------")
-local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-06-05")
-local CreditsSection7 = CreditsTab:CreateSection("Last Update: Added Tropical World settings")
+local CreditsSection6 = CreditsTab:CreateSection("Last Updated: 2023-06-29")
+local CreditsSection7 = CreditsTab:CreateSection("Last Update: Added Summer Carnival Settings")
 local CreditsSection8 = CreditsTab:CreateSection("Upcoming Update: Pet Hatcher")
 local CreditsSection9 = CreditsTab:CreateSection("Discord Link: https://discord.gg/83aFw8rGM8")
 local CreditsSection10 = CreditsTab:CreateSection("-------------------------------------------------------------------------------------")
@@ -1412,7 +1417,7 @@ local AutoCollectGroupRewards = AutoFarmTab:CreateToggle({
 --	end,
 --})
  local AutoBuyChristmasBoosts = AutoFarmTab:CreateToggle({
- 	Name = "🐰 Auto Buy Event Boosts",
+ 	Name = "🎪 Auto Buy Event Boosts",
  	CurrentValue = false,
  	Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
  	Callback = function(bool)
