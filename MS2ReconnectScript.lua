@@ -229,7 +229,7 @@ function GetEggsLeft(Value)
     elseif _G.SettingsTable.EggType == "Turquoise Egg" then
 	EggsLeft = DataTokenCount / 300000000
     elseif _G.SettingsTable.EggType == "Patriot Egg" then
-	EggsLeft = DataTokenCount / 15000000000
+	EggsLeft = DataCoinsCount / 15000000000
     else 
         EggsLeft = "Invalid Input or Not Updated"
     end
